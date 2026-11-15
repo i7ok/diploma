@@ -419,9 +419,6 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
 }
 .quality-card h3, .quality-card strong { color: var(--quality-ink); }
 .quality-card strong { font-size: .78em; }
-body:has(.roadmap.active) { background: #eaf5f0; }
-.roadmap h2 { color: #163d34; }
-.roadmap .eyebrow { color: #226b55; }
 .roadmap-steps {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -433,16 +430,16 @@ body:has(.roadmap.active) { background: #eaf5f0; }
 .roadmap-steps li {
   margin: 0;
   padding: clamp(15px, 2vw, 28px);
-  border: 1px solid #bdd9cc;
+  border: 1px solid var(--line);
   border-radius: 14px;
-  background: #f9fdfb;
-  color: #163d34;
+  background: #fff;
+  color: var(--ink);
   counter-increment: roadmap-step;
 }
 .roadmap-steps li::before {
   display: block;
   margin-bottom: .45em;
-  color: #226b55;
+  color: var(--violet);
   font-size: 1.4em;
   font-weight: 750;
   content: counter(roadmap-step, decimal-leading-zero);
@@ -499,9 +496,9 @@ body:has(.roadmap.active) { background: #eaf5f0; }
 .roadmap-note {
   margin-top: 1em;
   padding: .7em .9em;
-  border-left: 3px solid #468e76;
-  background: #f9fdfb;
-  color: #163d34;
+  border-left: 3px solid var(--violet);
+  background: #fff;
+  color: var(--ink);
 }
 .techniques h2 { max-width: none; }
 .techniques-grid .card { padding: clamp(11px, 1.5vw, 22px); }
@@ -789,6 +786,8 @@ body:has(.roadmap.active) { background: #eaf5f0; }
   .tips-grid { gap: 6px; }
   .tips-grid .card, .tips-summary { padding: 7px; }
 }
+.closing h2 { max-width: none; font-size: clamp(35px, 6.2vw, 92px); }
+.closing .speaker-links { margin-top: .6em; }
 </style></head><body><header class="brand"><img src="assets/itmo-white.png" alt="Университет ИТМО" width="1040" height="410"></header><span class="slide-number" id="slide-number" aria-live="polite" aria-label="Слайд 1 из 17">1/17</span><main class="deck" id="deck">
 <section class="slide cover active"><div class="eyebrow">Вводная встреча</div><h1>От <span class="highlight">алгоритма</span><br>к игре</h1><p class="lead">Как превратить учебную задачу в интересную игру — и чему при этом научиться самому.</p><p class="mini">← → — слайды · F / А — полный экран · Home / End — начало / конец</p></section>
 <section class="slide">
@@ -804,33 +803,6 @@ body:has(.roadmap.active) { background: #eaf5f0; }
       </nav>
     </div>
     <img class="speaker-photo" src="assets/ilya-savenok.jpg" alt="Илья Савенок" width="1198" height="1600">
-  </div>
-</section>
-<section class="slide anatomy" id="game-anatomy">
-  <div class="eyebrow">Анатомия игры</div>
-  <h2>Из чего состоит игра?</h2>
-  <p class="lead">Четыре составляющие компьютерной игры.</p>
-  <div class="grid anatomy-grid">
-    <div class="card anatomy-card">
-      <span class="anatomy-symbol visual" aria-hidden="true">◈</span>
-      <h3>Визуал</h3><p>Графика, интерфейс, анимации и эффекты.</p>
-    </div>
-    <div class="card anatomy-card">
-      <span class="anatomy-symbol sound" aria-hidden="true">♫</span>
-      <h3>Звук</h3><p>Музыка, звуковые эффекты и озвучка.</p>
-    </div>
-    <div class="card anatomy-card">
-      <span class="anatomy-symbol mechanics" aria-hidden="true">↔</span>
-      <h3>Механики</h3><p>Действия игрока, правила, цели и ограничения.</p>
-    </div>
-    <div class="card anatomy-card">
-      <span class="anatomy-symbol implementation" aria-hidden="true">&lt;/&gt;</span>
-      <h3>Код</h3><p>Реализация механик, управления и игровой логики.</p>
-    </div>
-  </div>
-  <div class="anatomy-summary">
-    <p><strong>Механика — это то, как игрок взаимодействует с игрой.</strong></p>
-    <p>Код — это то, как игра работает.</p>
   </div>
 </section>
 <section class="slide anatomy" id="game-experience" data-step-reveal="Открыть ответ">
@@ -1169,6 +1141,16 @@ body:has(.roadmap.active) { background: #eaf5f0; }
     </article>
     <p class="tips-summary">Меньше лишнего контекста — больше ресурсов на полезную работу.</p>
   </div>
+</section>
+<section class="slide closing" id="thank-you">
+  <h2>Спасибо за внимание!</h2>
+  <p class="lead">Вы отвечаете за то, что сгенерировала нейросеть. Проверяйте, как работает игра, и исправляйте ошибки перед публикацией.</p>
+  <h3>Илья Савенок</h3>
+  <nav class="speaker-links" aria-label="Контакты Ильи Савенка">
+    <a href="https://t.me/i7nock" aria-label="Telegram, t.me/i7nock">t.me/i7nock</a>
+    <a href="https://vk.ru/i7nock" aria-label="ВКонтакте, vk.ru/i7nock">vk.ru/i7nock</a>
+    <a href="mailto:i7ok@yandex.ru">i7ok@yandex.ru</a>
+  </nav>
 </section>
 </main><nav class="controls" aria-label="Управление слайдами"><button id="prev" aria-label="Предыдущий слайд">←</button><button id="next" aria-label="Следующий слайд">→</button></nav><script>
 const slides = [...document.querySelectorAll('.slide')];
