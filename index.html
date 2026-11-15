@@ -491,10 +491,10 @@ body:has(.roadmap.active) { background: #eaf5f0; }
 }
 .fun-question span { font-size: 2em; font-weight: 800; line-height: 1; }
 .fun-answer { visibility: hidden; }
-.fun-visible .fun-question { visibility: hidden; }
-.fun-visible .fun-answer { visibility: visible; }
+.step-revealed .fun-question { visibility: hidden; }
+.step-revealed .fun-answer { visibility: visible; }
 @media (prefers-reduced-motion: no-preference) {
-  .fun-visible .fun-answer { animation: chat-in 300ms ease-out both; }
+  .step-revealed .fun-answer { animation: chat-in 300ms ease-out both; }
 }
 .roadmap-note {
   margin-top: 1em;
@@ -668,7 +668,93 @@ body:has(.roadmap.active) { background: #eaf5f0; }
 @media (max-width: 560px) {
   .schedule-legend { grid-template-columns: 1fr; }
 }
-</style></head><body><header class="brand"><img src="assets/itmo-white.png" alt="Университет ИТМО" width="1040" height="410"></header><span class="slide-number" id="slide-number" aria-live="polite" aria-label="Слайд 1 из 17">1/17</span><main class="deck" id="deck">
+.publishing h2, .schedule h2 { max-width: none; font-size: clamp(27px, 4.2vw, 62px); }
+.publish-window {
+  overflow: hidden;
+  border: 1px solid #d0d7de;
+  border-radius: 13px;
+  background: #fff;
+  color: #24292f;
+}
+.publish-top {
+  display: flex;
+  align-items: center;
+  gap: .6em;
+  padding: .58em .8em;
+  border-bottom: 1px solid #d0d7de;
+  background: #f6f8fa;
+  color: #57606a;
+  font: 650 .72em/1.3 system-ui, sans-serif;
+}
+.publish-top span { color: #24292f; }
+.publish-body { padding: clamp(10px, 1.35vw, 20px); font-size: .86em; line-height: 1.35; }
+.publish-body p { margin: .55em 0; }
+.publish-body > :last-child { margin-bottom: 0; }
+.publish-body a, .publish-docs a { color: var(--violet); }
+.publish-ui { display: flex; align-items: center; flex-wrap: wrap; gap: 5px; }
+.publish-ui kbd, .publish-field > kbd {
+  display: inline-block;
+  padding: 3px 6px;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  background: #f6f8fa;
+  font: 650 .83em/1.35 system-ui, sans-serif;
+}
+.publish-ui .publish-action { border-color: #1f883d; background: #1f883d; color: #fff; }
+.publish-file, .publish-address {
+  margin-top: .5em;
+  padding: .42em .55em;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  background: #f6f8fa;
+  font-size: .83em;
+}
+.publish-file { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 5px; }
+.publish-field { margin: .6em 0; }
+.publish-field > span { display: block; margin-bottom: .25em; color: #57606a; font-size: .85em; }
+.publish-address { overflow-wrap: anywhere; }
+.publish-docs { margin-top: .7em; }
+.schedule-context { max-width: 78ch; color: var(--muted); font-size: .92em; }
+.schedule-heading { margin-bottom: .5em; }
+.schedule .schedule-figure { margin: 0; padding: clamp(12px, 2vw, 26px); }
+.schedule .schedule-track { min-height: clamp(46px, 7.5vh, 82px); }
+.schedule .schedule-legend { margin-top: .8em; }
+.schedule-quote {
+  margin-top: .75em;
+  padding: .5em .8em;
+  border-radius: 10px;
+  background: #ece3f8;
+  color: #392050;
+}
+.schedule-quote p { margin: .08em 0; }
+.schedule-punchline, .schedule-comma { visibility: hidden; }
+.schedule-suffix { display: inline-grid; }
+.schedule-suffix > span { grid-area: 1 / 1; }
+.step-revealed .schedule-punchline, .step-revealed .schedule-comma { visibility: visible; }
+.step-revealed .schedule-teaser { visibility: hidden; }
+@media (max-width: 850px) {
+  .publishing-grid.grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .publishing-grid.grid.three { grid-template-columns: 1fr; }
+  .publish-body { font-size: .82em; }
+  .schedule-context { margin-bottom: .65em; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .publishing.active .publish-window { animation: chat-in 340ms both; }
+  .publishing.active .publish-window:nth-child(2) { animation-delay: .2s; }
+  .publishing.active .publish-window:nth-child(3) { animation-delay: .4s; }
+  .step-revealed .schedule-punchline { animation: chat-in 280ms ease-out both; }
+}
+@media (max-width: 400px) and (max-height: 700px) {
+  .publishing-grid { gap: 6px; }
+  .publish-top { padding: .28em .55em; }
+  .publish-body { padding: 6px 8px; }
+  .publish-body p, .publish-field { margin-block: .3em; }
+  .publish-field > span { display: inline-block; margin: 0 .3em .2em 0; }
+  .publish-field .publish-ui { display: inline-flex; }
+}
+</style></head><body><header class="brand"><img src="assets/itmo-white.png" alt="Университет ИТМО" width="1040" height="410"></header><span class="slide-number" id="slide-number" aria-live="polite" aria-label="Слайд 1 из 16">1/16</span><main class="deck" id="deck">
 <section class="slide cover active"><div class="eyebrow">Вводная встреча</div><h1>От <span class="highlight">алгоритма</span><br>к игре</h1><p class="lead">Как превратить учебную задачу в интересную игру — и чему при этом научиться самому.</p><p class="mini">← → — слайды · F / А — полный экран · Home / End — начало / конец</p></section>
 <section class="slide">
   <div class="speaker-layout">
@@ -712,7 +798,7 @@ body:has(.roadmap.active) { background: #eaf5f0; }
     <p>Код — это то, как игра работает.</p>
   </div>
 </section>
-<section class="slide anatomy" id="game-experience">
+<section class="slide anatomy" id="game-experience" data-step-reveal="Открыть ответ">
   <div class="eyebrow">Игровой опыт</div>
   <h2>Из чего состоит игра?</h2>
   <p class="lead">Четыре составляющие игрового опыта.</p>
@@ -940,25 +1026,45 @@ body:has(.roadmap.active) { background: #eaf5f0; }
     </article>
   </div>
 </section>
-<section class="slide" id="vibe-coding">
-  <div class="eyebrow">Разработка с ИИ</div>
-  <h2>Вайбкодинг <span class="highlight">≠</span> агентная разработка</h2>
-  <p class="lead">Быстрый прототип — только начало. Потребуется много тестировать и тщательно проверять каждую часть игры.</p>
-  <div class="grid">
-    <div class="card">
-      <h3>Проверяйте каждый сценарий</h3>
-      <p>Пройдите игру от запуска до победы и поражения. Проверьте управление, правила, очки и повторный запуск.</p>
-    </div>
-    <div class="card">
-      <h3>Проверяйте поведение игры</h3>
-      <p>Если вы не хотите разбираться в коде, который может разрастись, особенно важны проверки в самой игре. Повторяйте их после изменений.</p>
-    </div>
+<section class="slide publishing" id="publish-game">
+  <div class="eyebrow">Публикация браузерной игры</div>
+  <h2>Как выложить игру на GitHub Pages</h2>
+  <div class="grid three publishing-grid">
+    <article class="publish-window">
+      <div class="publish-top">01 <span>Репозиторий</span></div>
+      <div class="publish-body">
+        <h3>Загрузите файлы игры</h3>
+        <p>Создайте публичный репозиторий, например <code>my-game</code>.</p>
+        <div class="publish-ui"><kbd>Add file</kbd><span aria-hidden="true">→</span><kbd>Upload files</kbd></div>
+        <div class="publish-file"><code>index.html</code><span>в корне</span></div>
+        <p>Добавьте нужные файлы, сохранив их папки. Нажмите <strong>Commit changes</strong>.</p>
+      </div>
+    </article>
+    <article class="publish-window">
+      <div class="publish-top">02 <span>Settings → Pages</span></div>
+      <div class="publish-body">
+        <h3>Настройте публикацию</h3>
+        <div class="publish-field"><span>Source</span><kbd>Deploy from a branch</kbd></div>
+        <div class="publish-field"><span>Branch</span><div class="publish-ui"><kbd>main</kbd><kbd>/ (root)</kbd><kbd class="publish-action">Save</kbd></div></div>
+      </div>
+    </article>
+    <article class="publish-window">
+      <div class="publish-top">03 <span>GitHub Pages</span></div>
+      <div class="publish-body">
+        <h3>Откройте игру</h3>
+        <p>После публикации вернитесь в <strong>Settings → Pages</strong> и нажмите <strong>Visit site</strong>.</p>
+        <div class="publish-address"><code>https://username.github.io/my-game/</code></div>
+        <p><a href="https://i7ok.github.io/GPT_Snake/" target="_blank" rel="noopener">Готовый пример · Змейка ↗</a></p>
+      </div>
+    </article>
   </div>
+  <p class="mini publish-docs"><a href="https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site" target="_blank" rel="noopener">Инструкция GitHub ↗</a></p>
 </section>
-<section class="slide"><div class="eyebrow">Главный принцип</div><h2>Не «алгоритм в декорациях», а <span class="highlight">игровой вызов</span></h2><div class="grid"><div class="card"><span class="tag">Учебная задача</span><h3>Алгоритм Дейкстры</h3><p>Найти кратчайшие пути в графе с неотрицательными весами.</p></div><div class="card"><span class="tag">Игровой контекст</span><h3>Спасательная операция</h3><p>В затопленном городе нужно доставить помощь по дорожной сети.</p></div></div><p class="note">Важно: выбор маршрута на глаз ещё не обучает алгоритму Дейкстры. Игрок должен освоить его принцип работы.</p></section>
 <section class="slide schedule" id="schedule-without-ai">
-  <div class="eyebrow">Пример распределения времени</div>
-  <h2>Разработка без ИИ</h2>
+  <div class="eyebrow">Работа над игрой</div>
+  <h2>Вайбкодинг <span class="highlight">≠</span> агентная разработка</h2>
+  <p class="schedule-context">Тщательно проверяйте каждую часть игры, особенно если вы не хотите разбираться в коде, который может разрастись. Проверьте управление, правила и повторный запуск. После изменений повторяйте проверки.</p>
+  <h3 class="schedule-heading">Разработка без ИИ</h3>
   <figure class="schedule-figure">
     <figcaption>Всего <strong>7 дней</strong></figcaption>
     <div class="schedule-ruler" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div>
@@ -973,10 +1079,16 @@ body:has(.roadmap.active) { background: #eaf5f0; }
       <li class="testing"><span>Тестирование, балансировка и полировка</span><span class="visually-hidden">, 1 день</span></li>
     </ul>
   </figure>
+  <div class="schedule-quote">
+    <p>Не так страшны первые 80% работы<span class="schedule-suffix"><span class="schedule-teaser">, как…</span><span class="schedule-comma">,</span></span></p>
+    <p class="schedule-punchline" aria-hidden="true"><strong>как вторые 80% работы</strong></p>
+  </div>
 </section>
-<section class="slide schedule" id="schedule-with-ai">
-  <div class="eyebrow">Пример распределения времени</div>
-  <h2>Разработка с ИИ</h2>
+<section class="slide schedule" id="schedule-with-ai" data-step-reveal="Показать концовку">
+  <div class="eyebrow">Работа над игрой</div>
+  <h2>Вайбкодинг <span class="highlight">≠</span> агентная разработка</h2>
+  <p class="schedule-context">Тщательно проверяйте каждую часть игры, особенно если вы не хотите разбираться в коде, который может разрастись. Проверьте управление, правила и повторный запуск. После изменений повторяйте проверки.</p>
+  <h3 class="schedule-heading">Разработка с ИИ</h3>
   <figure class="schedule-figure">
     <figcaption>Всего <strong>7 дней</strong></figcaption>
     <div class="schedule-ruler" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div>
@@ -991,6 +1103,10 @@ body:has(.roadmap.active) { background: #eaf5f0; }
       <li class="testing"><span>Тестирование, балансировка и полировка</span><span class="visually-hidden">, 4 дня</span></li>
     </ul>
   </figure>
+  <div class="schedule-quote">
+    <p>Не так страшны первые 80% работы<span class="schedule-suffix"><span class="schedule-teaser">, как…</span><span class="schedule-comma">,</span></span></p>
+    <p class="schedule-punchline"><strong>как вторые 80% работы</strong></p>
+  </div>
 </section>
 </main><nav class="controls" aria-label="Управление слайдами"><button id="prev" aria-label="Предыдущий слайд">←</button><button id="next" aria-label="Следующий слайд">→</button></nav><script>
 const slides = [...document.querySelectorAll('.slide')];
@@ -998,7 +1114,6 @@ const deck = document.getElementById('deck');
 const slideNumber = document.getElementById('slide-number');
 const chatSlide = document.getElementById('snake-chats');
 const gameSlide = document.getElementById('snake-games');
-const experienceSlide = document.getElementById('game-experience');
 const nextButton = document.getElementById('next');
 const gameFrames = gameSlide.querySelectorAll('iframe');
 // Chromium blocks sibling files inside sandboxed file:// frames.
@@ -1043,8 +1158,8 @@ function show(n) {
 
   if (slides[previous] === gameSlide) gameFrames.forEach(frame => frame.removeAttribute('src'));
   if (slides[i] === gameSlide) gameFrames.forEach(frame => { frame.src = frame.dataset.src; });
-  if (slides[i] === experienceSlide) experienceSlide.classList.remove('fun-visible');
-  nextButton.setAttribute('aria-label', slides[i] === experienceSlide ? 'Открыть ответ' : 'Следующий слайд');
+  slides[i].classList.remove('step-revealed');
+  nextButton.setAttribute('aria-label', slides[i].dataset.stepReveal || 'Следующий слайд');
   history.replaceState(null, '', `#${i + 1}`);
 
   if (previous < 0 || reduceMotion.matches) return;
@@ -1068,10 +1183,11 @@ function show(n) {
 
 document.getElementById('prev').onclick = () => show(i - 1);
 function advance(repeat = false) {
-  if (slides[i] === experienceSlide) {
+  const slide = slides[i];
+  if (slide.dataset.stepReveal) {
     if (repeat) return;
-    if (!experienceSlide.classList.contains('fun-visible')) {
-      experienceSlide.classList.add('fun-visible');
+    if (!slide.classList.contains('step-revealed')) {
+      slide.classList.add('step-revealed');
       nextButton.setAttribute('aria-label', 'Следующий слайд');
       return;
     }
