@@ -162,8 +162,57 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
   .footer { grid-template-columns: 1fr; justify-items: center; }
   .footer > :first-child, .footer > :last-child { display: none; }
 }
+.speaker-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(22px, 5vw, 76px);
+}
+.speaker-photo {
+  display: block;
+  width: min(100%, 320px);
+  height: auto;
+  border-radius: 20px;
+  justify-self: end;
+}
+.speaker-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 1.4em;
+}
+.speaker-links a {
+  padding: .45em .85em;
+  border-radius: 9px;
+  background: #eee2fb;
+  color: var(--violet);
+  font-size: .88em;
+  font-weight: 650;
+  text-decoration: none;
+}
+.speaker-links a:hover { text-decoration: underline; }
+.speaker-links a:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
+@media (max-width: 560px) {
+  .speaker-layout { grid-template-columns: 1fr; }
+  .speaker-photo { width: min(100%, 220px); justify-self: start; }
+}
 </style></head><body><div class="progress" id="progress"></div><header class="brand"><img src="assets/itmo-white.png" alt="Университет ИТМО" width="1040" height="410"></header><main class="deck" id="deck">
-<section class="slide cover active"><div class="eyebrow">Вводная встреча · 30 минут</div><h1>От <span class="highlight">алгоритма</span><br>к игре</h1><p class="lead">Как превратить учебную задачу в интересную браузерную игру — и чему при этом научиться самому.</p><p class="mini">← → — слайды · F — полный экран · Home / End — начало / конец</p></section>
+<section class="slide cover active"><div class="eyebrow">Вводная встреча</div><h1>От <span class="highlight">алгоритма</span><br>к игре</h1><p class="lead">Как превратить учебную задачу в интересную браузерную игру — и чему при этом научиться самому.</p><p class="mini">← → — слайды · F / А — полный экран · Home / End — начало / конец</p></section>
+<section class="slide">
+  <div class="speaker-layout">
+    <div>
+      <div class="eyebrow">О спикере</div>
+      <h2>Илья Савенок</h2>
+      <p class="lead">Game Developer, Agentic Developer &amp; Product Owner в <strong>Original Games</strong></p>
+      <nav class="speaker-links" aria-label="Контакты Ильи Савенка">
+        <a href="https://t.me/i7nock">Telegram</a>
+        <a href="https://vk.ru/i7nock">ВКонтакте</a>
+        <a href="mailto:i7ok@yandex.ru">i7ok@yandex.ru</a>
+      </nav>
+    </div>
+    <img class="speaker-photo" src="assets/ilya-savenok.jpg" alt="Илья Савенок" width="320" height="320">
+  </div>
+</section>
 <section class="slide"><div class="eyebrow">01 · Зачем это нужно</div><h2>Вы будете не просто <span class="highlight">писать игру</span></h2><p class="lead">Ваша задача — понять алгоритм настолько хорошо, чтобы превратить его в правила, решения и последствия внутри игры.</p><div class="grid"><div class="card"><h3>Вы — исследователь алгоритма</h3><p>Понимаете шаги, ограничения и типичные ошибки.</p></div><div class="card"><h3>Вы — геймдизайнер</h3><p>Превращаете знания в действия игрока и проверяемые игровые ситуации.</p></div></div></section>
 <section class="slide"><div class="eyebrow">02 · Демонстрация</div><h2>Четыре «Змейки».<br><span class="highlight">Один час.</span></h2><p class="lead">Четыре версии простой браузерной игры, созданные бесплатно с помощью разных ИИ.</p><div class="demo"><h3>Живая демонстрация</h3><p>Откройте свои четыре версии «Змейки» в соседних вкладках. Сравните управление, внешний вид, ошибки и качество исполнения.</p><p class="mini">Ссылки на игры можно добавить сюда позднее. Презентация не зависит от них.</p></div><p class="note">Вопрос группе: почему результаты отличаются и какой из них действительно лучше?</p></section>
 <section class="slide"><div class="eyebrow">03 · Вайбкодинг</div><h2>ИИ пишет код.<br><span class="highlight">Вы отвечаете за смысл.</span></h2><div class="steps"><div class="step"><h3>Идея</h3><small>Что делает игрок?</small></div><div class="step"><h3>Промпт</h3><small>Какие правила и требования?</small></div><div class="step"><h3>Прототип</h3><small>HTML / CSS / JavaScript</small></div><div class="step"><h3>Проверка</h3><small>Работает ли алгоритм правильно?</small></div></div><p class="lead">Можно быстро получить работающий прототип. Но нельзя доверять ему без тестирования и понимания алгоритма.</p></section>
@@ -176,6 +225,56 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
 <section class="slide"><div class="eyebrow">10 · Пять вопросов</div><h2>Проверьте свою идею</h2><ol><li>Что произойдёт, если игрок ошибётся?</li><li>Какое решение он принимает сам?</li><li>Почему нельзя всегда действовать одинаково?</li><li>Что изменится на следующем уровне?</li><li>Как проверить, чему игрок научился?</li></ol></section>
 <section class="slide"><div class="eyebrow">11 · Первое домашнее задание</div><h2>Мини-GDD: <span class="highlight">концепция вашей игры</span></h2><div class="grid"><div class="card"><h3>Учебная часть</h3><ul><li>Дисциплина и алгоритм</li><li>Что нужно освоить</li><li>Как алгоритм связан с действиями игрока</li><li>Как проверить освоение</li></ul></div><div class="card"><h3>Игровая часть</h3><ul><li>Название, жанр и сеттинг</li><li>Основная механика</li><li>Цель, правила, победа и поражение</li><li>Набросок внешнего вида</li></ul></div></div><p class="lead">Объём: 1–3 страницы. Код пока не нужен. Черновик лучше идеальной пустоты.</p></section>
 <section class="slide cover"><div class="eyebrow">Финал</div><h1>Не начинайте<br>с <span class="highlight">кода.</span></h1><p class="lead">Начните с вопроса: «Какое действие игрока поможет ему понять алгоритм?»</p><p class="big">Алгоритм → решение → игра → обучение.</p></section>
-</main><div class="footer"><span>От алгоритма к игре</span><span class="controls"><button id="prev" aria-label="Предыдущий слайд">←</button> <span id="counter" aria-live="polite">1 / 13</span> <button id="next" aria-label="Следующий слайд">→</button></span><span>F — полный экран</span></div><script>
-const slides=[...document.querySelectorAll('.slide')];let i=0;function show(n){i=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,j)=>s.classList.toggle('active',i===j));window.scrollTo(0,0);document.getElementById('counter').textContent=`${i+1} / ${slides.length}`;document.getElementById('progress').style.width=`${(i+1)/slides.length*100}%`;history.replaceState(null,'',`#${i+1}`)}document.getElementById('prev').onclick=()=>show(i-1);document.getElementById('next').onclick=()=>show(i+1);document.addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();show(i+1)}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();show(i-1)}if(e.key==='Home')show(0);if(e.key==='End')show(slides.length-1);if(e.key.toLowerCase()==='f'){if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()}});show(Number(location.hash.slice(1))-1||0);
+</main><div class="footer"><span>От алгоритма к игре</span><span class="controls"><button id="prev" aria-label="Предыдущий слайд">←</button> <span id="counter" aria-live="polite">1 / 14</span> <button id="next" aria-label="Следующий слайд">→</button></span><span>F / А — полный экран</span></div><script>
+const slides = [...document.querySelectorAll('.slide')];
+const counter = document.getElementById('counter');
+const progress = document.getElementById('progress');
+let i = 0;
+
+function show(n) {
+  i = Math.max(0, Math.min(slides.length - 1, n));
+  slides.forEach((slide, index) => slide.classList.toggle('active', i === index));
+  window.scrollTo(0, 0);
+  counter.textContent = `${i + 1} / ${slides.length}`;
+  progress.style.width = `${(i + 1) / slides.length * 100}%`;
+  history.replaceState(null, '', `#${i + 1}`);
+}
+
+document.getElementById('prev').onclick = () => show(i - 1);
+document.getElementById('next').onclick = () => show(i + 1);
+
+document.addEventListener('keydown', event => {
+  if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey) return;
+  switch (event.code) {
+    case 'Space':
+      if (event.target.closest('button, a')) return;
+      // Let focused controls keep their native keyboard behavior.
+    case 'ArrowRight':
+    case 'PageDown':
+      event.preventDefault();
+      show(i + 1);
+      break;
+    case 'ArrowLeft':
+    case 'PageUp':
+      event.preventDefault();
+      show(i - 1);
+      break;
+    case 'Home':
+      event.preventDefault();
+      show(0);
+      break;
+    case 'End':
+      event.preventDefault();
+      show(slides.length - 1);
+      break;
+    case 'KeyF':
+      if (event.repeat) return;
+      event.preventDefault();
+      if (document.fullscreenElement) document.exitFullscreen?.();
+      else document.documentElement.requestFullscreen?.();
+      break;
+  }
+});
+
+show(Number(location.hash.slice(1)) - 1 || 0);
 </script></body></html>
