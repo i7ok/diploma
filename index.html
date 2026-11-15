@@ -453,7 +453,52 @@ body:has(.roadmap.active) { background: #eaf5f0; }
 @media (max-width: 560px) {
   .roadmap-steps { grid-template-columns: 1fr; }
 }
-</style></head><body><header class="brand"><img src="assets/itmo-white.png" alt="Университет ИТМО" width="1040" height="410"></header><span class="slide-number" id="slide-number" aria-live="polite" aria-label="Слайд 1 из 14">1/14</span><main class="deck" id="deck">
+.anatomy h2 { max-width: none; }
+.anatomy .lead { margin-bottom: .8em; }
+.anatomy-card { padding: clamp(12px, 1.5vw, 24px); }
+.anatomy-symbol {
+  display: inline-grid;
+  place-items: center;
+  min-width: 2em;
+  height: 2em;
+  margin-bottom: .45em;
+  padding-inline: .35em;
+  border-radius: 8px;
+  color: #234f9d;
+  background: #e7efff;
+  font-size: .83em;
+  font-weight: 750;
+}
+.anatomy-symbol.sound { color: #6622a1; background: #f0e5fc; }
+.anatomy-symbol.mechanics { color: #13624b; background: #e6f5ed; }
+.anatomy-symbol.implementation { color: #815111; background: #fff1d9; }
+.anatomy-summary {
+  margin-top: clamp(10px, 1.5vw, 20px);
+  padding: .6em 1em;
+  border-radius: 12px;
+  background: #ece3f8;
+  color: #392050;
+  font-size: .9em;
+  text-align: center;
+}
+.anatomy-summary p { margin: .2em 0; }
+.fun-tile { display: grid; }
+.fun-tile > div { grid-area: 1 / 1; }
+.fun-question {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: .2em;
+  color: var(--violet);
+}
+.fun-question span { font-size: 2em; font-weight: 800; line-height: 1; }
+.fun-answer { visibility: hidden; }
+.fun-visible .fun-question { visibility: hidden; }
+.fun-visible .fun-answer { visibility: visible; }
+@media (prefers-reduced-motion: no-preference) {
+  .fun-visible .fun-answer { animation: chat-in 300ms ease-out both; }
+}
+</style></head><body><header class="brand"><img src="assets/itmo-white.png" alt="Университет ИТМО" width="1040" height="410"></header><span class="slide-number" id="slide-number" aria-live="polite" aria-label="Слайд 1 из 16">1/16</span><main class="deck" id="deck">
 <section class="slide cover active"><div class="eyebrow">Вводная встреча</div><h1>От <span class="highlight">алгоритма</span><br>к игре</h1><p class="lead">Как превратить учебную задачу в интересную игру — и чему при этом научиться самому.</p><p class="mini">← → — слайды · F / А — полный экран · Home / End — начало / конец</p></section>
 <section class="slide">
   <div class="speaker-layout">
@@ -468,6 +513,67 @@ body:has(.roadmap.active) { background: #eaf5f0; }
       </nav>
     </div>
     <img class="speaker-photo" src="assets/ilya-savenok.jpg" alt="Илья Савенок" width="1198" height="1600">
+  </div>
+</section>
+<section class="slide anatomy" id="game-anatomy">
+  <div class="eyebrow">Анатомия игры</div>
+  <h2>Из чего состоит игра?</h2>
+  <p class="lead">Четыре составляющие компьютерной игры.</p>
+  <div class="grid anatomy-grid">
+    <div class="card anatomy-card">
+      <span class="anatomy-symbol visual" aria-hidden="true">◈</span>
+      <h3>Визуал</h3><p>Графика, интерфейс, анимации и эффекты.</p>
+    </div>
+    <div class="card anatomy-card">
+      <span class="anatomy-symbol sound" aria-hidden="true">♫</span>
+      <h3>Звук</h3><p>Музыка, звуковые эффекты и озвучка.</p>
+    </div>
+    <div class="card anatomy-card">
+      <span class="anatomy-symbol mechanics" aria-hidden="true">↔</span>
+      <h3>Механики</h3><p>Действия игрока, правила, цели и ограничения.</p>
+    </div>
+    <div class="card anatomy-card">
+      <span class="anatomy-symbol implementation" aria-hidden="true">&lt;/&gt;</span>
+      <h3>Код</h3><p>Реализация механик, управления и игровой логики.</p>
+    </div>
+  </div>
+  <div class="anatomy-summary">
+    <p><strong>Механика — это то, как игрок взаимодействует с игрой.</strong></p>
+    <p>Код — это то, как игра работает.</p>
+  </div>
+</section>
+<section class="slide anatomy" id="game-experience">
+  <div class="eyebrow">Игровой опыт</div>
+  <h2>Из чего состоит игра?</h2>
+  <p class="lead">Четыре составляющие игрового опыта.</p>
+  <div class="grid anatomy-grid">
+    <div class="card anatomy-card">
+      <span class="anatomy-symbol visual" aria-hidden="true">◈</span>
+      <h3>Визуал</h3><p>Что игрок видит: графику, интерфейс и анимации.</p>
+    </div>
+    <div class="card anatomy-card">
+      <span class="anatomy-symbol sound" aria-hidden="true">♫</span>
+      <h3>Звук</h3><p>Что игрок слышит: музыку, эффекты и звуки мира.</p>
+    </div>
+    <div class="card anatomy-card">
+      <span class="anatomy-symbol mechanics" aria-hidden="true">↔</span>
+      <h3>Механики</h3><p>Что игрок делает и по каким правилам действует.</p>
+    </div>
+    <div class="card anatomy-card fun-tile">
+      <div id="fun-question" class="fun-question">
+        <span aria-hidden="true">?</span>
+        <h3>Чего не хватает?</h3>
+      </div>
+      <div id="fun-answer" class="fun-answer">
+        <span class="anatomy-symbol implementation" aria-hidden="true">✦</span>
+        <h3>Фан (Fun)</h3><p>Что игрок чувствует: азарт, интерес и удовольствие от игры.</p>
+      </div>
+    </div>
+  </div>
+  <div class="anatomy-summary">
+    <p>Визуал и звук создают атмосферу.</p>
+    <p>Механики создают игровой процесс.</p>
+    <p class="fun-answer"><strong>Фан заставляет хотеть играть дальше.</strong></p>
   </div>
 </section>
 <section class="slide" id="game-quality">
@@ -599,6 +705,8 @@ body:has(.roadmap.active) { background: #eaf5f0; }
 const slides = [...document.querySelectorAll('.slide')];
 const slideNumber = document.getElementById('slide-number');
 const gameSlide = document.getElementById('snake-games');
+const experienceSlide = document.getElementById('game-experience');
+const nextButton = document.getElementById('next');
 const gameFrames = gameSlide.querySelectorAll('iframe');
 // Chromium blocks sibling files inside sandboxed file:// frames.
 if (location.protocol === 'file:') gameFrames.forEach(frame => frame.removeAttribute('sandbox'));
@@ -620,6 +728,8 @@ function show(n) {
 
   if (slides[previous] === gameSlide) gameFrames.forEach(frame => frame.removeAttribute('src'));
   if (slides[i] === gameSlide) gameFrames.forEach(frame => { frame.src = frame.dataset.src; });
+  if (slides[i] === experienceSlide) experienceSlide.classList.remove('fun-visible');
+  nextButton.setAttribute('aria-label', slides[i] === experienceSlide ? 'Открыть ответ' : 'Следующий слайд');
   history.replaceState(null, '', `#${i + 1}`);
 
   if (previous < 0 || reduceMotion.matches) return;
@@ -632,7 +742,19 @@ function show(n) {
 }
 
 document.getElementById('prev').onclick = () => show(i - 1);
-document.getElementById('next').onclick = () => show(i + 1);
+function advance(repeat = false) {
+  if (slides[i] === experienceSlide) {
+    if (repeat) return;
+    if (!experienceSlide.classList.contains('fun-visible')) {
+      experienceSlide.classList.add('fun-visible');
+      nextButton.setAttribute('aria-label', 'Следующий слайд');
+      return;
+    }
+  }
+  show(i + 1);
+}
+
+nextButton.onclick = () => advance();
 
 document.addEventListener('keydown', event => {
   if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey) return;
@@ -643,7 +765,7 @@ document.addEventListener('keydown', event => {
     case 'ArrowRight':
     case 'PageDown':
       event.preventDefault();
-      show(i + 1);
+      advance(event.repeat);
       break;
     case 'ArrowLeft':
     case 'PageUp':
