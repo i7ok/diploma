@@ -208,6 +208,17 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
   max-width: 12ch;
 }
 #snake-games .showcase-copy h2 { font-size: clamp(28px, 3vw, 46px); }
+.showcase-notes {
+  margin-top: clamp(14px, 2.5vh, 24px);
+  padding-top: 13px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: clamp(14px, 1.15vw, 18px);
+  line-height: 1.38;
+}
+.showcase-notes h3 { color: var(--ink); }
+.showcase-notes p, .showcase-notes ul { margin: .55em 0; }
+.showcase-notes > :last-child { margin-bottom: 0; }
 .showcase-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -367,10 +378,12 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
     max-width: none;
     font-size: clamp(23px, 5.15vw, 37px);
   }
-  .showcase-grid { width: min(100%, 640px); }
+  .showcase-copy { display: contents; }
+  .showcase-grid { grid-row: 2; width: min(100%, 640px); }
+  .showcase-notes { grid-row: 3; margin-top: 0; }
 }
 @media (max-width: 560px) {
-  .showcase-window { border-radius: 11px; min-height: 170px; grid-template-rows: 31px minmax(0, 1fr); }
+  .showcase-window { border-radius: 11px; min-height: 190px; grid-template-rows: 31px minmax(0, 1fr); }
   .window-bar small { display: none; }
   .window-bar a { font-size: 10px; }
   .chat-artifact, .chat-composer { display: none; }
@@ -389,7 +402,7 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
     to { opacity: 1; transform: translateY(0); }
   }
 }
-</style></head><body><header class="brand"><img src="assets/itmo-white.png" alt="Университет ИТМО" width="1040" height="410"></header><span class="slide-number" id="slide-number" aria-live="polite" aria-label="Слайд 1 из 16">1/16</span><main class="deck" id="deck">
+</style></head><body><header class="brand"><img src="assets/itmo-white.png" alt="Университет ИТМО" width="1040" height="410"></header><span class="slide-number" id="slide-number" aria-live="polite" aria-label="Слайд 1 из 14">1/14</span><main class="deck" id="deck">
 <section class="slide cover active"><div class="eyebrow">Вводная встреча</div><h1>От <span class="highlight">алгоритма</span><br>к игре</h1><p class="lead">Как превратить учебную задачу в интересную браузерную игру — и чему при этом научиться самому.</p><p class="mini">← → — слайды · F / А — полный экран · Home / End — начало / конец</p></section>
 <section class="slide">
   <div class="speaker-layout">
@@ -406,11 +419,20 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
     <img class="speaker-photo" src="assets/ilya-savenok.jpg" alt="Илья Савенок" width="1198" height="1600">
   </div>
 </section>
-<section class="slide"><div class="eyebrow">Зачем это нужно</div><h2>Вы будете не просто <span class="highlight">писать игру</span></h2><p class="lead">Ваша задача — понять алгоритм настолько хорошо, чтобы превратить его в правила, решения и последствия внутри игры.</p><div class="grid"><div class="card"><h3>Вы — исследователь алгоритма</h3><p>Понимаете шаги, ограничения и типичные ошибки.</p></div><div class="card"><h3>Вы — геймдизайнер</h3><p>Превращаете знания в действия игрока и проверяемые игровые ситуации.</p></div></div></section>
 <section class="slide showcase" id="snake-chats">
   <div class="showcase-copy">
-    <div class="eyebrow">Примеры диалогов</div>
-    <h2>Просто и бесплатно</h2>
+    <div class="showcase-title">
+      <div class="eyebrow">Примеры диалогов</div>
+      <h2>Просто и бесплатно</h2>
+    </div>
+    <div class="showcase-notes">
+      <h3>Зачем это нужно</h3>
+      <p>Поймите алгоритм настолько хорошо, чтобы превратить его в правила, решения и последствия внутри игры.</p>
+      <ul>
+        <li><strong>Как исследователь</strong> разберите шаги, ограничения и типичные ошибки алгоритма.</li>
+        <li><strong>Как геймдизайнер</strong> превратите эти знания в действия игрока и игровые ситуации, которые можно проверить.</li>
+      </ul>
+    </div>
   </div>
   <div class="showcase-grid">
     <article class="showcase-window gpt">
@@ -453,8 +475,16 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
 </section>
 <section class="slide showcase" id="snake-games">
   <div class="showcase-copy">
-    <div class="eyebrow">Игры на автопилоте</div>
-    <h2>Четыре «Змейки»</h2>
+    <div class="showcase-title">
+      <div class="eyebrow">Игры на автопилоте</div>
+      <h2>Четыре «Змейки»</h2>
+    </div>
+    <div class="showcase-notes">
+      <p>Четыре браузерные игры за один час. Каждую помог сделать свой ИИ, и все четыре версии получились бесплатно.</p>
+      <h3>Сравните результаты</h3>
+      <p>Что изменилось в правилах и управлении? Какие идеи оказались интереснее в игре, чем в чате?</p>
+      <p class="note">Почему результаты отличаются и какая версия получилась лучше?</p>
+    </div>
   </div>
   <div class="showcase-grid">
     <article class="showcase-window gpt">
@@ -475,7 +505,6 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
     </article>
   </div>
 </section>
-<section class="slide"><div class="eyebrow">Обсуждение</div><h2>Четыре «Змейки».<br><span class="highlight">Один час.</span></h2><p class="lead">Четыре версии простой браузерной игры, созданные бесплатно с помощью разных ИИ.</p><div class="demo"><h3>Сравните результаты</h3><p>Что изменилось в правилах и управлении? Какие идеи оказались интереснее в игре, чем в чате?</p></div><p class="note">Вопрос группе: почему результаты отличаются и какой из них действительно лучше?</p></section>
 <section class="slide"><div class="eyebrow">Вайбкодинг</div><h2>ИИ пишет код.<br><span class="highlight">Вы отвечаете за смысл.</span></h2><div class="steps"><div class="step"><h3>Идея</h3><small>Что делает игрок?</small></div><div class="step"><h3>Промпт</h3><small>Какие правила и требования?</small></div><div class="step"><h3>Прототип</h3><small>HTML / CSS / JavaScript</small></div><div class="step"><h3>Проверка</h3><small>Работает ли алгоритм правильно?</small></div></div><p class="lead">Можно быстро получить работающий прототип. Но нельзя доверять ему без тестирования и понимания алгоритма.</p></section>
 <section class="slide"><div class="eyebrow">Главный принцип</div><h2>Не «алгоритм в декорациях», а <span class="highlight">игровой вызов</span></h2><div class="grid"><div class="card"><span class="tag">Учебная задача</span><h3>Алгоритм Дейкстры</h3><p>Найти кратчайшие пути в графе с неотрицательными весами.</p></div><div class="card"><span class="tag">Игровой контекст</span><h3>Спасательная операция</h3><p>В затопленном городе нужно доставить помощь по дорожной сети.</p></div></div><p class="note">Важно: выбор маршрута на глаз ещё не обучает алгоритму Дейкстры. Игрок должен освоить его принцип работы.</p></section>
 <section class="slide"><div class="eyebrow">Схема проектирования</div><h2>От знания к действию</h2><div class="steps"><div class="step"><h3>Алгоритм</h3><small>Что изучаем?</small></div><div class="step"><h3>Действие</h3><small>Что решает игрок?</small></div><div class="step"><h3>Цель</h3><small>Зачем ему это?</small></div><div class="step"><h3>Обратная связь</h3><small>Что произойдёт?</small></div></div><p class="quote">Игрок должен не только видеть алгоритм, но и применять его, получать последствия и учиться на ошибках.</p></section>
