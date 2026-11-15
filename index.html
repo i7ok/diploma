@@ -586,7 +586,89 @@ body:has(.roadmap.active) { background: #eaf5f0; }
   .game-examples-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .game-example img { height: auto; aspect-ratio: 16 / 10; }
 }
-</style></head><body><header class="brand"><img src="assets/itmo-white.png" alt="Университет ИТМО" width="1040" height="410"></header><span class="slide-number" id="slide-number" aria-live="polite" aria-label="Слайд 1 из 15">1/15</span><main class="deck" id="deck">
+#snake-games .showcase-window { position: relative; }
+.game-link::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  content: "";
+}
+#snake-games .showcase-window:hover, #snake-games .showcase-window:focus-within {
+  outline: 2px solid var(--violet);
+  outline-offset: 2px;
+}
+.schedule h2 { max-width: none; font-size: clamp(25px, 4.7vw, 72px); }
+.schedule-figure {
+  margin: clamp(18px, 4vh, 48px) 0 0;
+  padding: clamp(13px, 2.6vw, 35px);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+}
+.schedule-figure figcaption { margin-bottom: .65em; color: var(--muted); }
+.schedule-figure figcaption strong { color: var(--ink); }
+.schedule-ruler, .schedule-track { display: grid; text-align: center; }
+.schedule-ruler {
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0;
+  margin-bottom: .35em;
+  color: var(--muted);
+  font-size: .68em;
+  font-variant-numeric: tabular-nums;
+}
+.schedule-ruler span {
+  padding-bottom: .25em;
+  border-bottom: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+.schedule-ruler span:last-child { border-right: 1px solid var(--line); }
+.schedule-track {
+  overflow: hidden;
+  min-height: clamp(52px, 10vh, 104px);
+  border-radius: 11px;
+  color: #fff;
+  font-size: clamp(12px, 2vw, 24px);
+  font-weight: 750;
+}
+.schedule-track span { display: grid; min-width: 0; place-items: center; white-space: nowrap; }
+.schedule-track .prototype, .schedule-legend .prototype::before { background: #6219bb; }
+.schedule-track .mechanics, .schedule-legend .mechanics::before { background: #245f95; }
+.schedule-track .testing, .schedule-legend .testing::before { background: #216b56; }
+.schedule-legend {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .55em 1em;
+  margin: 1.25em 0 0;
+  padding: 0;
+  list-style: none;
+}
+.schedule-legend li {
+  display: flex;
+  align-items: flex-start;
+  gap: .5em;
+  margin: 0;
+  font-size: .82em;
+}
+.schedule-legend li::before {
+  flex: none;
+  width: .7em;
+  height: .7em;
+  margin-top: .36em;
+  border-radius: 3px;
+  content: "";
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+@media (max-width: 560px) {
+  .schedule-legend { grid-template-columns: 1fr; }
+}
+</style></head><body><header class="brand"><img src="assets/itmo-white.png" alt="Университет ИТМО" width="1040" height="410"></header><span class="slide-number" id="slide-number" aria-live="polite" aria-label="Слайд 1 из 17">1/17</span><main class="deck" id="deck">
 <section class="slide cover active"><div class="eyebrow">Вводная встреча</div><h1>От <span class="highlight">алгоритма</span><br>к игре</h1><p class="lead">Как превратить учебную задачу в интересную игру — и чему при этом научиться самому.</p><p class="mini">← → — слайды · F / А — полный экран · Home / End — начало / конец</p></section>
 <section class="slide">
   <div class="speaker-layout">
@@ -841,25 +923,75 @@ body:has(.roadmap.active) { background: #eaf5f0; }
   </div>
   <div class="showcase-grid">
     <article class="showcase-window gpt">
-      <div class="window-bar"><h3><span class="window-mark" aria-hidden="true">☰</span>ChatGPT <small>OpenAI</small></h3><a href="https://github.com/i7ok/GPT_Snake" aria-label="Исходный код игры от ChatGPT">Код ↗</a></div>
+      <div class="window-bar"><h3><span class="window-mark" aria-hidden="true">☰</span>ChatGPT <small>OpenAI</small></h3><a class="game-link" href="https://i7ok.github.io/GPT_Snake/" target="_blank" rel="noopener" aria-label="Открыть игру от ChatGPT в новой вкладке">Играть ↗</a></div>
       <iframe title="Змейка от ChatGPT в режиме автопилота" data-src="games/chatgpt.html" sandbox="allow-scripts" tabindex="-1"></iframe>
     </article>
     <article class="showcase-window claude">
-      <div class="window-bar"><h3><span class="window-mark" aria-hidden="true">✳</span>Claude <small>Anthropic</small></h3><a href="https://github.com/i7ok/Claude_Snake" aria-label="Исходный код игры от Claude">Код ↗</a></div>
+      <div class="window-bar"><h3><span class="window-mark" aria-hidden="true">✳</span>Claude <small>Anthropic</small></h3><a class="game-link" href="https://i7ok.github.io/Claude_Snake/" target="_blank" rel="noopener" aria-label="Открыть игру от Claude в новой вкладке">Играть ↗</a></div>
       <iframe title="Змейка от Claude в режиме автопилота" data-src="games/claude.html" sandbox="allow-scripts" tabindex="-1"></iframe>
     </article>
     <article class="showcase-window alisa">
-      <div class="window-bar"><h3><span class="window-mark" aria-hidden="true"></span>Алиса <small>Яндекс</small></h3><a href="https://github.com/i7ok/Alisa_Snake" aria-label="Исходный код игры от Алиса">Код ↗</a></div>
+      <div class="window-bar"><h3><span class="window-mark" aria-hidden="true"></span>Алиса <small>Яндекс</small></h3><a class="game-link" href="https://i7ok.github.io/Alisa_Snake/" target="_blank" rel="noopener" aria-label="Открыть игру от Алиса в новой вкладке">Играть ↗</a></div>
       <iframe title="Змейка от Алиса в режиме автопилота" data-src="games/alisa.html" sandbox="allow-scripts" tabindex="-1"></iframe>
     </article>
     <article class="showcase-window giga">
-      <div class="window-bar"><h3><span class="window-mark" aria-hidden="true"></span>ГигаЧат <small>Сбер</small></h3><a href="https://github.com/i7ok/Giga_snake" aria-label="Исходный код игры от ГигаЧат">Код ↗</a></div>
+      <div class="window-bar"><h3><span class="window-mark" aria-hidden="true"></span>ГигаЧат <small>Сбер</small></h3><a class="game-link" href="https://i7ok.github.io/Giga_snake/" target="_blank" rel="noopener" aria-label="Открыть игру от ГигаЧат в новой вкладке">Играть ↗</a></div>
       <iframe title="Змейка от ГигаЧат в режиме автопилота" data-src="games/gigachat.html" sandbox="allow-scripts" tabindex="-1"></iframe>
     </article>
   </div>
 </section>
-<section class="slide"><div class="eyebrow">Вайбкодинг</div><h2>ИИ пишет код.<br><span class="highlight">Вы отвечаете за смысл.</span></h2><div class="steps"><div class="step"><h3>Идея</h3><small>Что делает игрок?</small></div><div class="step"><h3>Промпт</h3><small>Какие правила и требования?</small></div><div class="step"><h3>Прототип</h3><small>HTML / CSS / JavaScript</small></div><div class="step"><h3>Проверка</h3><small>Работает ли алгоритм правильно?</small></div></div><p class="lead">Можно быстро получить работающий прототип. Но нельзя доверять ему без тестирования и понимания алгоритма.</p></section>
+<section class="slide" id="vibe-coding">
+  <div class="eyebrow">Разработка с ИИ</div>
+  <h2>Вайбкодинг <span class="highlight">≠</span> агентная разработка</h2>
+  <p class="lead">Быстрый прототип — только начало. Потребуется много тестировать и тщательно проверять каждую часть игры.</p>
+  <div class="grid">
+    <div class="card">
+      <h3>Проверяйте каждый сценарий</h3>
+      <p>Пройдите игру от запуска до победы и поражения. Проверьте управление, правила, очки и повторный запуск.</p>
+    </div>
+    <div class="card">
+      <h3>Проверяйте поведение игры</h3>
+      <p>Если вы не хотите разбираться в коде, который может разрастись, особенно важны проверки в самой игре. Повторяйте их после изменений.</p>
+    </div>
+  </div>
+</section>
 <section class="slide"><div class="eyebrow">Главный принцип</div><h2>Не «алгоритм в декорациях», а <span class="highlight">игровой вызов</span></h2><div class="grid"><div class="card"><span class="tag">Учебная задача</span><h3>Алгоритм Дейкстры</h3><p>Найти кратчайшие пути в графе с неотрицательными весами.</p></div><div class="card"><span class="tag">Игровой контекст</span><h3>Спасательная операция</h3><p>В затопленном городе нужно доставить помощь по дорожной сети.</p></div></div><p class="note">Важно: выбор маршрута на глаз ещё не обучает алгоритму Дейкстры. Игрок должен освоить его принцип работы.</p></section>
+<section class="slide schedule" id="schedule-without-ai">
+  <div class="eyebrow">Пример распределения времени</div>
+  <h2>Разработка без ИИ</h2>
+  <figure class="schedule-figure">
+    <figcaption>Всего <strong>7 дней</strong></figcaption>
+    <div class="schedule-ruler" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div>
+    <div class="schedule-track" style="grid-template-columns: 4fr 2fr 1fr" aria-hidden="true">
+      <span class="prototype">4 дня</span>
+      <span class="mechanics">2 дня</span>
+      <span class="testing">1 день</span>
+    </div>
+    <ul class="schedule-legend" aria-label="Этапы разработки">
+      <li class="prototype"><span>Создание рабочего прототипа</span><span class="visually-hidden">, 4 дня</span></li>
+      <li class="mechanics"><span>Доработка механик и функциональности</span><span class="visually-hidden">, 2 дня</span></li>
+      <li class="testing"><span>Тестирование, балансировка и полировка</span><span class="visually-hidden">, 1 день</span></li>
+    </ul>
+  </figure>
+</section>
+<section class="slide schedule" id="schedule-with-ai">
+  <div class="eyebrow">Пример распределения времени</div>
+  <h2>Разработка с ИИ</h2>
+  <figure class="schedule-figure">
+    <figcaption>Всего <strong>7 дней</strong></figcaption>
+    <div class="schedule-ruler" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div>
+    <div class="schedule-track" style="grid-template-columns: 1fr 2fr 4fr" aria-hidden="true">
+      <span class="prototype">1 день</span>
+      <span class="mechanics">2 дня</span>
+      <span class="testing">4 дня</span>
+    </div>
+    <ul class="schedule-legend" aria-label="Этапы разработки">
+      <li class="prototype"><span>Создание рабочего прототипа</span><span class="visually-hidden">, 1 день</span></li>
+      <li class="mechanics"><span>Доработка механик и функциональности</span><span class="visually-hidden">, 2 дня</span></li>
+      <li class="testing"><span>Тестирование, балансировка и полировка</span><span class="visually-hidden">, 4 дня</span></li>
+    </ul>
+  </figure>
+</section>
 </main><nav class="controls" aria-label="Управление слайдами"><button id="prev" aria-label="Предыдущий слайд">←</button><button id="next" aria-label="Следующий слайд">→</button></nav><script>
 const slides = [...document.querySelectorAll('.slide')];
 const deck = document.getElementById('deck');
@@ -916,6 +1048,16 @@ function show(n) {
   history.replaceState(null, '', `#${i + 1}`);
 
   if (previous < 0 || reduceMotion.matches) return;
+  const previousTrack = slides[previous].querySelector('.schedule-track');
+  const nextTrack = slides[i].querySelector('.schedule-track');
+  if (previousTrack && nextTrack) {
+    transition = nextTrack.animate([
+      { gridTemplateColumns: previousTrack.style.gridTemplateColumns },
+      { gridTemplateColumns: nextTrack.style.gridTemplateColumns },
+    ], { duration: 850, easing: 'cubic-bezier(.22,.7,.25,1)' });
+    return;
+  }
+
   const sameGrid = slides[i].matches('.showcase') && slides[previous].matches('.showcase');
   const offset = i > previous ? 26 : -26;
   transition = slides[i].animate([
