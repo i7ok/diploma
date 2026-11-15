@@ -62,6 +62,13 @@ var ov=document.getElementById('ov'),ovt=document.getElementById('ovt'),ovp=docu
 var md=document.getElementById('md'),modesEl=document.getElementById('modes'),go=document.getElementById('go'),hintEl=document.getElementById('hint');
 var K=[[0,-1],[0,1],[-1,0],[1,0]],B=[[-1,-1],[1,-1],[-1,1],[1,1]];
 var DIRS={king:K,bishop:B,queen:K.concat(B),knight:K.concat(B)};
+var demoModes = ['king', 'queen', 'bishop', 'knight'];
+var demoNames = {king:'Король', queen:'Ферзь', bishop:'Слон', knight:'Конь'};
+var demoMoves = Object.fromEntries(demoModes.map(function(piece) {
+  return [piece, DIRS[piece].map(function(pair) { return {x:pair[0], y:pair[1]}; })];
+}));
+var modeBadge = document.createElement('span');
+modeBadge.className = 'board-mode';
 var W8=[[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1]];
 var KM={'1,0':[2,1],'1,1':[1,2],'0,1':[-1,2],'-1,1':[-2,1],'-1,0':[-2,-1],'-1,-1':[-1,-2],'0,-1':[1,-2],'1,-1':[2,-1]};var GL={knight:'\u265E\uFE0E',king:'\u265A\uFE0E',bishop:'\u265D\uFE0E',queen:'\u265B\uFE0E'};
 var DESC={king:'Король: 4 направления. Стрелки или WASD.',bishop:'Слон: только по диагонали. Q E Z C или стрелки.',queen:'Ферзь: 8 направлений. Стрелки или WASD + Q E Z C.',knight:'Конь: прыжок буквой Г (2+1 клетка), перепрыгивает свой хвост. Управление как у ферзя, пунктир показывает следующий прыжок.'};
@@ -78,6 +85,7 @@ var snake,dir,queue,food,score,timer=null,state='idle',boost=false,mode='king',b
 function setBoost(b){boost=b;hintEl.textContent=b?'⚡ Ускорение ×2 · назад — обычная скорость':HINT}
 function setMode(m){
   mode=m;
+  modeBadge.textContent = GL[mode] + ' ' + demoNames[mode];
   Array.prototype.forEach.call(modesEl.children,function(b){b.classList.toggle('on',b.dataset.m===m)});
   md.textContent=DESC[m];bestEl.textContent=bests[m];
   if(state!=='run'&&state!=='pause')reset();
@@ -104,12 +112,12 @@ function pause(){
   }else if(state==='pause'){state='run';ov.classList.add('hide');schedule()}
 }
 function over(){
-  state='over';clearTimeout(timer);setTimeout(start, 750);
+  state='over';clearTimeout(timer);timer=setTimeout(start, 750);
   if(score>bests[mode]){bests[mode]=score;bestEl.textContent=score;try{snakeDemo.storage.setItem('snake-best-'+mode,score)}catch(e){}}
   ovt.textContent='Игра окончена';ovp.textContent='Счёт: '+score;go.textContent='Ещё раз';showMenu(true);ov.classList.remove('hide');
 }
 function tick(){
-  dir=snakeDemo.direction({size:N, snake, dir, food, wrap:true});
+  dir=snakeDemo.direction({size:N, snake, dir, food, wrap:true, moves:demoMoves[mode], step});
   var st=step(dir),h={x:(snake[0].x+st.x+N)%N,y:(snake[0].y+st.y+N)%N};
   if(snake.some(function(s,i){return i<snake.length-1&&s.x===h.x&&s.y===h.y})){draw();over();return}
   snake.unshift(h);
@@ -181,9 +189,16 @@ cv.addEventListener('touchmove',function(e){
   tx=t.clientX;ty=t.clientY;
 },{passive:true});
 cv.addEventListener('touchend',function(){tx=null});
-setMode('king');
 snakeDemo.mount(cv);
-start();
+document.body.append(modeBadge);
+var demoIndex = 0;
+function playDemoMode() {
+  setMode(demoModes[demoIndex]);
+  start();
+  demoIndex = (demoIndex + 1) % demoModes.length;
+}
+playDemoMode();
+setInterval(playDemoMode, 8000);
 })();
 </script>
 </body>

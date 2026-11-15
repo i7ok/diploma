@@ -10,7 +10,7 @@ body {
   place-items: center;
   background: var(--board-background, #12111a);
 }
-body > :not(canvas):not(output) { display: none !important; }
+body > :not(canvas):not(output):not(.board-mode) { display: none !important; }
 body > canvas {
   width: min(100vw, 100vh);
   height: min(100vw, 100vh);
@@ -18,10 +18,10 @@ body > canvas {
   border: 0;
   border-radius: 0;
 }
-body > output {
+body > output,
+.board-mode {
   position: absolute;
   top: 6px;
-  right: 6px;
   min-width: 2ch;
   padding: 4px 6px;
   border-radius: 5px;
@@ -29,4 +29,10 @@ body > output {
   color: #fff;
   text-align: center;
   font: 600 12px/1 system-ui, sans-serif;
+}
+
+body > output { right: 6px; }
+.board-mode {
+  left: 6px;
+  font-family: system-ui, "Segoe UI Symbol", sans-serif;
 }

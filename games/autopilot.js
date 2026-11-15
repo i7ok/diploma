@@ -1,8 +1,11 @@
 const snakeDemo = (() => {
-  const moves = [{x: 1, y: 0}, {x: 0, y: 1}, {x: -1, y: 0}, {x: 0, y: -1}];
+  const cardinalMoves = [{x: 1, y: 0}, {x: 0, y: 1}, {x: -1, y: 0}, {x: 0, y: -1}];
   const scores = new Map();
 
-  function direction({size, snake, dir, food, hazards = [], wrap = false, blockTail = false}) {
+  function direction({
+    size, snake, dir, food, hazards = [], wrap = false, blockTail = false,
+    moves = cardinalMoves, step = move => move,
+  }) {
     const cell = ({x, y}) => y * size + x;
     const tail = snake.length - 1;
     const blocked = new Set([
@@ -17,8 +20,9 @@ const snakeDemo = (() => {
       const current = queue[index];
       for (const move of moves) {
         if (!current.first && move.x === -dir.x && move.y === -dir.y) continue;
-        let x = current.x + move.x;
-        let y = current.y + move.y;
+        const delta = step(move);
+        let x = current.x + delta.x;
+        let y = current.y + delta.y;
         if (wrap) {
           x = (x + size) % size;
           y = (y + size) % size;
