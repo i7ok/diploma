@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="theme-color" content="#070a12">
+  <title>VOID//SNAKE 2.1</title>
+  <style>
+    :root {
+      --cyan: #43f5e5;
+      --pink: #ff3cac;
+      --lime: #c8ff4d;
+      --bg: #070a12;
+      --muted: #8196ad;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: radial-gradient(ellipse at top, #172c43, #080d18 55%, #04060b);
+      color: #eafcff;
+      font-family: monospace;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 8px
+    }
+
+    button,
+    select {
+      font: inherit
+    }
+
+    button {
+      cursor: pointer;
+      border: 1px solid #31566a;
+      border-radius: 6px;
+      background: #142437;
+      color: var(--cyan);
+      padding: 10px 14px;
+      font-weight: bold;
+      letter-spacing: .08em;
+    }
+
+    button:hover {
+      filter: brightness(1.25)
+    }
+
+    button:active {
+      transform: scale(.97)
+    }
+
+    button.primary {
+      background: var(--cyan);
+      color: #071018;
+      border: 0
+    }
+
+    button.selected {
+      background: var(--cyan);
+      color: #071018
+    }
+
+    .wrap {
+      width: min(900px, 100%);
+      height: 100%;
+      max-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: clamp(5px, 1vh, 10px);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      flex-shrink: 0
+    }
+
+    .brand small {
+      font-size: 10px;
+      color: var(--cyan);
+      letter-spacing: .3em
+    }
+
+    h1 {
+      font-size: clamp(24px, 4vh, 39px);
+      margin: 4px 0 0;
+      letter-spacing: -.06em
+    }
+
+    h1 span {
+      color: var(--pink)
+    }
+
+    .version {
+      font-size: 10px;
+      color: var(--muted);
+      text-align: right
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 7px;
+      flex-shrink: 0
+    }
+
+    .stat,
+    .shell,
+    .bottom {
+      background: linear-gradient(145deg, #111c2c, #0a101c);
+      border: 1px solid #203449;
+      border-radius: 9px;
+    }
+
+    .stat {
+      padding: 7px 12px
+    }
+
+    .stat label {
+      display: block;
+      font-size: 9px;
+      color: var(--muted);
+      letter-spacing: .16em
+    }
+
+    .stat strong {
+      display: block;
+      font-size: clamp(16px, 2.5vh, 22px);
+      color: var(--cyan);
+      margin-top: 3px
+    }
+
+    .shell {
+      padding: 8px;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center
+    }
+
+    .canvas-wrap {
+      position: relative;
+      width: min(100%, calc(100dvh - 230px));
+      max-height: calc(100dvh - 230px);
+      aspect-ratio: 1;
+      background: #060b13;
+      border: 1px solid #294458;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      touch-action: none
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 16px;
+      background: #050912df;
+      backdrop-filter: blur(7px);
+    }
+
+    .overlay.hidden {
+      display: none
+    }
+
+    .panel {
+      width: min(460px, 100%);
+      max-height: 100%;
+      overflow: auto
+    }
+
+    .panel h2 {
+      font-size: clamp(23px, 4vh, 34px);
+      color: var(--cyan);
+      margin: 0 0 7px
+    }
+
+    .panel p {
+      font-size: 11px;
+      line-height: 1.6;
+      color: #a9bfd1
+    }
+
+    .mode-list,
+    .skin-list {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin: 12px 0
+    }
+
+    .mode-list button,
+    .skin-list button {
+      font-size: 9px;
+      padding: 8px 10px
+    }
+
+    .menu-actions {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      width: 100%;
+      margin-top: 8px
+    }
+
+    .actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap
+    }
+
+    .actions button {
+      font-size: 9px;
+      padding: 8px 10px
+    }
+
+    .status {
+      font-size: 9px;
+      color: var(--muted)
+    }
+
+    .bottom {
+      padding: 8px 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 9px;
+      line-height: 1.6
+    }
+
+    kbd {
+      border: 1px solid #405b72;
+      border-radius: 3px;
+      padding: 2px 4px;
+      color: #fff
+    }
+
+    .mobile-pad {
+      display: none
+    }
+
+    .info {
+      color: var(--muted);
+      font-size: 10px;
+      margin: 8px 0
+    }
+
+    .achievement {
+      color: var(--lime);
+      font-size: 10px;
+      margin: 6px 0
+    }
+
+    #toast {
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #102538ef;
+      border: 1px solid var(--cyan);
+      padding: 8px 12px;
+      border-radius: 5px;
+      color: var(--cyan);
+      font-size: 10px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .2s;
+      z-index: 2;
+      white-space: nowrap;
+    }
+
+    #toast.show {
+      opacity: 1
+    }
+
+    @media(max-height:700px) {
+      .bottom {
+        display: none
+      }
+
+      .canvas-wrap {
+        width: min(100%, calc(100dvh - 160px));
+        max-height: calc(100dvh - 160px)
+      }
+    }
+
+    @media(max-width:600px) {
+      body {
+        padding: 5px
+      }
+
+      .wrap {
+        gap: 5px
+      }
+
+      .version {
+        display: none
+      }
+
+      .shell {
+        padding: 5px
+      }
+
+      .canvas-wrap {
+        width: min(100%, calc(100dvh - 220px));
+        max-height: calc(100dvh - 220px)
+      }
+
+      .mobile-pad {
+        display: grid;
+        grid-template-columns: repeat(3, 39px);
+        grid-template-rows: repeat(2, 32px);
+        gap: 3px;
+        justify-content: center;
+        margin-top: 5px;
+      }
+
+      .mobile-pad button {
+        padding: 0;
+        font-size: 15px
+      }
+
+      .up {
+        grid-column: 2
+      }
+
+      .left {
+        grid-column: 1;
+        grid-row: 2
+      }
+
+      .down {
+        grid-column: 2;
+        grid-row: 2
+      }
+
+      .right {
+        grid-column: 3;
+        grid-row: 2
+      }
+
+      .stat {
+        padding: 6px
+      }
+
+      .stat label {
+        font-size: 8px
+      }
+
+      .stat strong {
+        font-size: 17px
+      }
+
+      .actions button {
+        padding: 7px;
+        font-size: 8px
+      }
+    }
+
+    @media(max-height:520px) {
+
+      .mobile-pad,
+      .bottom {
+        display: none
+      }
+
+      .canvas-wrap {
+        width: min(100%, calc(100dvh - 105px));
+        max-height: calc(100dvh - 105px)
+      }
+    }
+  </style>
+<link rel="stylesheet" href="board.css">
+<script src="autopilot.js"></script>
+</head>
+
+<body style="--board-background:#060b13">
+  <main class="wrap">
+    <header>
+      <div class="brand">
+        <small>AI ARCADE PROJECT // 002</small>
+        <h1>VOID<span>//</span>SNAKE</h1>
+      </div>
+      <div class="version">CYBERPUNK EDITION<br>BUILD 02.10</div>
+    </header>
+
+    <section class="stats">
+      <div class="stat"><label>SCORE</label><strong id="score">0000</strong></div>
+      <div class="stat"><label>BEST</label><strong id="best">0000</strong></div>
+      <div class="stat"><label>LEVEL</label><strong id="level">01</strong></div>
+      <div class="stat"><label>LENGTH</label><strong id="length">03</strong></div>
+    </section>
+
+    <section class="shell">
+      <div class="canvas-wrap">
+        <canvas id="game" width="600" height="600"></canvas>
+        <div id="toast"></div>
+        <div class="overlay" id="overlay">
+          <div class="panel" id="menu">
+            <h2>ENTER THE VOID</h2>
+            <p>Цифровая пустота ждёт. Выбирай режим и начинай выживание.</p>
+            <div class="mode-list">
+              <button class="selected" data-mode="classic">CLASSIC</button>
+              <button data-mode="rush">NEON RUSH</button>
+              <button data-mode="portal">PORTAL</button>
+            </div>
+            <p id="modeDescription">Классическая змейка. Стены смертельны.</p>
+            <div class="skin-list">
+              <button class="selected" data-skin="cyber">CYBER</button>
+              <button data-skin="toxic">TOXIC</button>
+              <button data-skin="blood">BLOOD</button>
+              <button data-skin="ghost">GHOST</button>
+              <button data-skin="rainbow">RAINBOW</button>
+            </div>
+            <div class="menu-actions">
+              <button class="primary" id="startBtn">START GAME</button>
+              <button id="achievementsBtn">ACHIEVEMENTS</button>
+            </div>
+            <div class="info" id="menuInfo">
+              WASD / ARROWS // SPACE TO PAUSE<br>
+              🟡 x2 очки · 🔵 замедление на 7 сек. · 🟣 щит от удара
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="status" id="status">SYSTEM READY // SELECT MODE</div>
+        <div class="actions">
+          <button id="menuBtn">MENU</button>
+          <button id="pauseBtn">PAUSE</button>
+          <button id="soundBtn">SOUND: ON</button>
+          <button id="restartBtn">RESTART</button>
+        </div>
+      </div>
+
+      <div class="mobile-pad">
+        <button class="up" data-dir="up">▲</button>
+        <button class="left" data-dir="left">◀</button>
+        <button class="down" data-dir="down">▼</button>
+        <button class="right" data-dir="right">▶</button>
+      </div>
+    </section>
+
+    <section class="bottom">
+      <div><b>MOVE</b> <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> / ARROWS</div>
+      <div><b>PAUSE</b> <kbd>SPACE</kbd> <b>MENU</b> <kbd>ESC</kbd></div>
+      <div>POWER CORES // SURVIVE // EVOLVE</div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const canvas = document.getElementById('game');
+      const ctx = canvas.getContext('2d');
+      const $ = id => document.getElementById(id);
+      const N = 25, CELL = 24;
+
+      const skins = {
+        cyber: {head: '#c8ff4d', body: '#20cfc2', glow: '#43f5e5'},
+        toxic: {head: '#e5ff59', body: '#75d62e', glow: '#a6ff38'},
+        blood: {head: '#ff718c', body: '#c21f51', glow: '#ff3c69'},
+        ghost: {head: '#ffffff', body: '#a6b7e9', glow: '#b7c8ff'},
+        rainbow: {head: '#ffffff', body: '#43f5e5', glow: '#ff3cac'}
+      };
+
+      const modeDescriptions = {
+        classic: 'Классика: стены смертельны. Все бонусы, препятствия и вирус активны с самого начала.',
+        rush: '60 секунд на максимум очков. Скорость постоянно растёт. Все игровые механики активны сразу.',
+        portal: 'Края поля соединены порталами. Все бонусы, препятствия и вирус активны с самого начала.'
+      };
+
+      let mode = 'classic', skin = 'cyber';
+      let snake = [], dir = {x: 1, y: 0}, nextDir = {x: 1, y: 0};
+      let food = null, bonus = null, obstacles = [];
+      let score = 0, level = 1, best = 0;
+      let tickMs = 135, last = 0, acc = 0;
+      let state = 'ready', sound = true, audio = null;
+      let particles = [], boss = null;
+      let timeLeft = 60, elapsed = 0;
+      let slowLeft = 0, doubleLeft = 0;
+      let toastTimeout = null;
+
+      let achievements = JSON.parse(snakeDemo.storage.getItem('voidAchievements') || '{}');
+      let records = JSON.parse(snakeDemo.storage.getItem('voidRecords') || '{"classic":0,"rush":0,"portal":0}');
+
+      best = Number(snakeDemo.storage.getItem('voidBest_' + mode) || 0);
+      $('best').textContent = String(best).padStart(4, '0');
+
+      function save() {
+        snakeDemo.storage.setItem('voidAchievements', JSON.stringify(achievements));
+        snakeDemo.storage.setItem('voidRecords', JSON.stringify(records));
+      }
+
+      function notify(message) {
+        const el = $('toast');
+        el.textContent = message;
+        el.classList.add('show');
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => el.classList.remove('show'), 2200);
+      }
+
+      function beep(freq = 500, dur = .08, type = 'sine') {
+        if (!sound) return;
+        try {
+          audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+          if (audio.state === 'suspended') audio.resume();
+          const o = audio.createOscillator(), g = audio.createGain();
+          o.type = type; o.frequency.value = freq;
+          g.gain.setValueAtTime(.045, audio.currentTime);
+          g.gain.exponentialRampToValueAtTime(.001, audio.currentTime + dur);
+          o.connect(g); g.connect(audio.destination);
+          o.start(); o.stop(audio.currentTime + dur);
+        } catch (e) { }
+      }
+
+      function updateHUD() {
+        $('score').textContent = String(score).padStart(4, '0');
+        $('best').textContent = String(best).padStart(4, '0');
+        $('level').textContent = String(level).padStart(2, '0');
+        $('length').textContent = String(snake.length).padStart(2, '0');
+      }
+
+      function occupied(p) {
+        return snake.some(s => s.x === p.x && s.y === p.y) ||
+          obstacles.some(o => o.x === p.x && o.y === p.y) ||
+          (food && food.x === p.x && food.y === p.y) ||
+          (bonus && bonus.x === p.x && bonus.y === p.y) ||
+          (boss && boss.x === p.x && boss.y === p.y);
+      }
+
+      function randomCell() {
+        for (let i = 0; i < 1000; i++) {
+          const p = {x: Math.floor(Math.random() * N), y: Math.floor(Math.random() * N)};
+          if (!occupied(p)) return p;
+        }
+        return {x: 2, y: 2};
+      }
+
+      function addObstacle() {
+        for (let i = 0; i < 100; i++) {
+          const p = randomCell();
+          const nearSnake = snake.some(s => Math.abs(s.x - p.x) + Math.abs(s.y - p.y) < 5);
+          if (!nearSnake) {obstacles.push(p); return }
+        }
+      }
+
+      function spawnBoss() {
+        boss = {...randomCell(), timer: 0};
+      }
+
+      function reset() {
+        snake = [
+          {x: 12, y: 12}, {x: 11, y: 12}, {x: 10, y: 12}
+        ];
+        snake.shield = 0;
+
+        dir = {x: 1, y: 0};
+        nextDir = {...dir};
+
+        score = 0; level = 1;
+        tickMs = 135;
+        food = null; bonus = null; obstacles = [];
+        particles = []; boss = null;
+        timeLeft = 60; elapsed = 0;
+        slowLeft = 0; doubleLeft = 0;
+        last = 0; acc = 0;
+
+        // Все игровые элементы присутствуют с первого забега.
+        addObstacle();
+        addObstacle();
+        addObstacle();
+        spawnBoss();
+        placeFood();
+
+        updateHUD();
+        draw();
+      }
+
+      function placeFood() {
+        food = randomCell();
+      }
+
+      function spawnBonus() {
+        if (!bonus && Math.random() < .018) {
+          const types = ['double', 'slow', 'shield'];
+          bonus = {
+            ...randomCell(),
+            type: types[Math.floor(Math.random() * types.length)],
+            life: 90
+          };
+        }
+      }
+
+      function setDirection(name) {
+        const d = {
+          up: {x: 0, y: -1}, down: {x: 0, y: 1},
+          left: {x: -1, y: 0}, right: {x: 1, y: 0}
+        }[name];
+
+        if (!d) return;
+        if (d.x === -nextDir.x && d.y === -nextDir.y) return;
+        nextDir = d;
+      }
+
+      function unlock(id, name) {
+        if (achievements[id]) return;
+        achievements[id] = true;
+        save();
+        notify('ACHIEVEMENT UNLOCKED: ' + name);
+        beep(1000, .2, 'triangle');
+      }
+
+      function checkAchievements() {
+        if (score >= 10) unlock('first', 'FIRST BLOOD');
+        if (snake.length >= 25) unlock('long', 'LONG BOY');
+        if (level >= 10) unlock('survivor', 'SURVIVOR');
+        if (elapsed >= 60) unlock('minute', 'ONE MINUTE');
+        if (score >= 500) unlock('rich', 'DATA TYCOON');
+      }
+
+      function eatFood() {
+        const multiplier = doubleLeft > 0 ? 2 : 1;
+        score += 10 * multiplier;
+        beep(750, .08, 'triangle');
+
+        for (let i = 0; i < 12; i++) {
+          particles.push({
+            x: food.x * CELL + 12, y: food.y * CELL + 12,
+            vx: (Math.random() - .5) * 5,
+            vy: (Math.random() - .5) * 5,
+            life: 1
+          });
+        }
+
+        if (score > best) {
+          best = score;
+          snakeDemo.storage.setItem('voidBest_' + mode, best);
+        }
+
+        const newLevel = Math.floor(score / 50) + 1;
+        if (newLevel > level) {
+          level = newLevel;
+          notify('LEVEL UP // ' + level);
+          beep(1000, .2, 'sawtooth');
+        }
+
+        placeFood();
+        checkAchievements();
+        updateHUD();
+      }
+
+      function collectBonus() {
+        if (!bonus) return;
+
+        if (bonus.type === 'double') {
+          doubleLeft = 10;
+          notify('GOLD CORE // x2 SCORE FOR 10 SEC');
+        } else if (bonus.type === 'slow') {
+          slowLeft = 7;
+          notify('BLUE CORE // SLOW MOTION FOR 7 SEC');
+        } else {
+          snake.shield = 1;
+          notify('PURPLE CORE // ONE HIT SHIELD');
+        }
+
+        beep(1100, .18, 'triangle');
+        bonus = null;
+      }
+
+      function step() {
+        dir = snakeDemo.direction({size:N, snake, dir, food, hazards:boss ? [...obstacles, boss] : obstacles});
+
+        let head = {
+          x: snake[0].x + dir.x,
+          y: snake[0].y + dir.y
+        };
+
+        if (mode === 'portal') {
+          if (head.x < 0) head.x = N - 1;
+          if (head.x >= N) head.x = 0;
+          if (head.y < 0) head.y = N - 1;
+          if (head.y >= N) head.y = 0;
+        } else if (
+          head.x < 0 || head.x >= N ||
+          head.y < 0 || head.y >= N
+        ) {
+          gameOver(); return;
+        }
+
+        const eating = head.x === food.x && head.y === food.y;
+        const bodyToCheck = snake.slice(0, eating ? snake.length : snake.length - 1);
+
+        const hitBody = bodyToCheck.some(
+          s => s.x === head.x && s.y === head.y
+        );
+        const hitObstacle = obstacles.some(
+          o => o.x === head.x && o.y === head.y
+        );
+
+        if (hitBody || hitObstacle) {
+          if (snake.shield) {
+            snake.shield = 0;
+            notify('SHIELD SAVED YOU');
+            beep(300, .2);
+          } else {
+            gameOver(); return;
+          }
+        }
+
+        snake.unshift(head);
+
+        if (eating) {
+          eatFood();
+        } else {
+          snake.pop();
+        }
+
+        if (bonus) {
+          bonus.life--;
+          if (head.x === bonus.x && head.y === bonus.y) {
+            collectBonus();
+          } else if (bonus.life <= 0) {
+            bonus = null;
+          }
+        }
+
+        if (boss) {
+          boss.timer++;
+          if (boss.timer >= 8) {
+            const dx = Math.sign(snake[0].x - boss.x);
+            const dy = Math.sign(snake[0].y - boss.y);
+
+            let candidate = {x: boss.x + dx, y: boss.y + dy};
+
+            if (
+              candidate.x >= 0 && candidate.x < N &&
+              candidate.y >= 0 && candidate.y < N &&
+              !obstacles.some(o => o.x === candidate.x && o.y === candidate.y)
+            ) {
+              boss = candidate;
+            }
+            boss.timer = 0;
+          }
+
+          if (boss.x === head.x && boss.y === head.y) {
+            if (snake.shield) {
+              snake.shield = 0;
+              boss = {...randomCell(), timer: 0};
+              notify('SHIELD DESTROYED THE VIRUS');
+            } else {
+              gameOver(); return;
+            }
+          }
+        }
+
+        spawnBonus();
+        updateHUD();
+      }
+
+      function gameOver() {
+        state = 'over';
+        setTimeout(start, 750);
+        beep(120, .4, 'sawtooth');
+
+        if (score > records[mode]) {
+          records[mode] = score;
+          save();
+        }
+
+        const title = mode === 'rush' ? 'TIME / SIGNAL LOST' : 'SIGNAL LOST';
+
+        showOverlay(
+          title,
+          `Забег окончен. Очки: ${score}. Рекорд режима: ${records[mode]}.`,
+          'PLAY AGAIN'
+        );
+
+        $('status').textContent = 'RUN TERMINATED // ' + mode.toUpperCase();
+      }
+
+      function showOverlay(title, message, buttonText) {
+        $('menu').innerHTML = `
+    <h2>${title}</h2>
+    <p>${message}</p>
+    <div class="menu-actions">
+      <button class="primary" id="overlayPlay">${buttonText}</button>
+      <button id="overlayMenu">MAIN MENU</button>
+    </div>`;
+
+        $('overlayPlay').onclick = start;
+        $('overlayMenu').onclick = showMenu;
+        $('overlay').classList.remove('hidden');
+      }
+
+      function start() {
+        if (state === 'running') return;
+        if (state === 'ready' || state === 'over') reset();
+
+        state = 'running';
+        $('overlay').classList.add('hidden');
+        $('status').textContent = 'SYSTEM ONLINE // ' + mode.toUpperCase();
+        last = 0; acc = 0;
+        requestAnimationFrame(loop);
+      }
+
+      function pause() {
+        if (state === 'running') {
+          state = 'paused';
+          showOverlay(
+            'PAUSED',
+            'Система приостановлена. Готов продолжить?',
+            'RESUME'
+          );
+          $('status').textContent = 'SYSTEM PAUSED';
+          $('overlayPlay').onclick = resume;
+        } else if (state === 'paused') {
+          resume();
+        }
+      }
+
+      function resume() {
+        if (state !== 'paused') return;
+        state = 'running';
+        $('overlay').classList.add('hidden');
+        $('status').textContent = 'SYSTEM ONLINE // ' + mode.toUpperCase();
+        last = 0;
+        requestAnimationFrame(loop);
+      }
+
+      function showMenu() {
+        state = 'ready';
+
+        $('menu').innerHTML = `
+    <h2>ENTER THE VOID</h2>
+    <p>Цифровая пустота ждёт. Выбирай режим и начинай выживание.</p>
+    <div class="mode-list">
+      <button data-mode="classic">CLASSIC</button>
+      <button data-mode="rush">NEON RUSH</button>
+      <button data-mode="portal">PORTAL</button>
+    </div>
+    <p id="modeDescription">${modeDescriptions[mode]}</p>
+    <div class="skin-list">
+      <button data-skin="cyber">CYBER</button>
+      <button data-skin="toxic">TOXIC</button>
+      <button data-skin="blood">BLOOD</button>
+      <button data-skin="ghost">GHOST</button>
+      <button data-skin="rainbow">RAINBOW</button>
+    </div>
+    <div class="menu-actions">
+      <button class="primary" id="startBtn">START GAME</button>
+      <button id="achievementsBtn">ACHIEVEMENTS</button>
+    </div>
+    <div class="info">
+      WASD / ARROWS // SPACE TO PAUSE<br>
+      🟡 x2 очки · 🔵 замедление на 7 сек. · 🟣 щит от удара
+    </div>
+  `;
+
+        bindMenu();
+        $('overlay').classList.remove('hidden');
+        $('status').textContent = 'SYSTEM READY // SELECT MODE';
+      }
+
+      function bindMenu() {
+        document.querySelectorAll('[data-mode]').forEach(b => {
+          b.classList.toggle('selected', b.dataset.mode === mode);
+
+          b.onclick = () => {
+            mode = b.dataset.mode;
+            best = Number(snakeDemo.storage.getItem('voidBest_' + mode) || 0);
+            $('best').textContent = String(best).padStart(4, '0');
+
+            $('modeDescription').textContent = modeDescriptions[mode];
+
+            document.querySelectorAll('[data-mode]').forEach(x => {
+              x.classList.toggle('selected', x.dataset.mode === mode);
+            });
+          };
+        });
+
+        document.querySelectorAll('[data-skin]').forEach(b => {
+          b.classList.toggle('selected', b.dataset.skin === skin);
+
+          b.onclick = () => {
+            skin = b.dataset.skin;
+
+            document.querySelectorAll('[data-skin]').forEach(x => {
+              x.classList.toggle('selected', x.dataset.skin === skin);
+            });
+
+            draw();
+          };
+        });
+
+        $('startBtn').onclick = start;
+        $('achievementsBtn').onclick = showAchievements;
+      }
+
+      function showAchievements() {
+        const list = [
+          ['first', 'FIRST BLOOD', 'Съесть первый энергетический шар'],
+          ['long', 'LONG BOY', 'Достичь длины 25 сегментов'],
+          ['survivor', 'SURVIVOR', 'Достичь 10 уровня'],
+          ['minute', 'ONE MINUTE', 'Выжить 60 секунд'],
+          ['rich', 'DATA TYCOON', 'Набрать 500 очков']
+        ];
+
+        $('menu').innerHTML = `
+    <h2>ACHIEVEMENTS</h2>
+    ${list.map(([id, name, desc]) => `
+      <div class="achievement">
+        ${achievements[id] ? '◆' : '◇'} ${name}
+        <div class="info">${desc}</div>
+      </div>
+    `).join('')}
+    <button id="backBtn">BACK</button>
+  `;
+
+        $('backBtn').onclick = showMenu;
+      }
+
+      function loop(t) {
+        if (state !== 'running') return;
+
+        if (!last) last = t;
+
+        const dt = Math.min(50, t - last);
+        last = t;
+        acc += dt;
+        elapsed += dt / 1000;
+
+        if (mode === 'rush') {
+          timeLeft -= dt / 1000;
+
+          if (timeLeft <= 0) {
+            timeLeft = 0;
+            gameOver();
+            return;
+          }
+        }
+
+        // Временные эффекты работают по реальному времени.
+        slowLeft = Math.max(0, slowLeft - dt / 1000);
+        doubleLeft = Math.max(0, doubleLeft - dt / 1000);
+
+        // Уровни меняют только скорость, а не доступность механик.
+        const baseSpeed = Math.max(55, 135 - (level - 1) * 8);
+        tickMs = slowLeft > 0 ? baseSpeed * 1.45 : baseSpeed;
+
+        while (acc >= tickMs) {
+          step();
+          acc -= tickMs;
+
+          if (state !== 'running') break;
+        }
+
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.life -= .04;
+        });
+
+        particles = particles.filter(p => p.life > 0);
+
+        draw();
+
+        if (state === 'running') requestAnimationFrame(loop);
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, 600, 600);
+        ctx.fillStyle = '#060b13';
+        ctx.fillRect(0, 0, 600, 600);
+
+        // Grid
+        ctx.strokeStyle = 'rgba(67,245,229,.07)';
+        ctx.lineWidth = 1;
+
+        for (let i = 0; i <= N; i++) {
+          ctx.beginPath();
+          ctx.moveTo(i * CELL, 0);
+          ctx.lineTo(i * CELL, 600);
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.moveTo(0, i * CELL);
+          ctx.lineTo(600, i * CELL);
+          ctx.stroke();
+        }
+
+        // Obstacles
+        obstacles.forEach(o => {
+          ctx.shadowBlur = 10;
+          ctx.shadowColor = '#ff3c69';
+          ctx.fillStyle = '#8d2445';
+          ctx.fillRect(o.x * CELL + 3, o.y * CELL + 3, 18, 18);
+          ctx.strokeStyle = '#ff718c';
+          ctx.strokeRect(o.x * CELL + 3, o.y * CELL + 3, 18, 18);
+          ctx.shadowBlur = 0;
+        });
+
+        // Food
+        if (food) {
+          const x = food.x * CELL + 12;
+          const y = food.y * CELL + 12;
+
+          ctx.shadowBlur = 20;
+          ctx.shadowColor = '#ff3cac';
+          ctx.fillStyle = '#ff3cac';
+          ctx.beginPath();
+          ctx.arc(x, y, 7 + Math.sin(Date.now() / 130), 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+
+          ctx.fillStyle = '#fff';
+          ctx.beginPath();
+          ctx.arc(x, y, 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Bonus cores
+        if (bonus) {
+          const colors = {
+            double: '#ffd84d',
+            slow: '#43aaff',
+            shield: '#bd73ff'
+          };
+
+          const symbols = {
+            double: '2',
+            slow: 'S',
+            shield: '✦'
+          };
+
+          const x = bonus.x * CELL + 12;
+          const y = bonus.y * CELL + 12;
+
+          ctx.shadowBlur = 20;
+          ctx.shadowColor = colors[bonus.type];
+          ctx.fillStyle = colors[bonus.type];
+          ctx.beginPath();
+          ctx.arc(x, y, 8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+
+          ctx.fillStyle = '#071018';
+          ctx.font = 'bold 10px monospace';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(symbols[bonus.type], x, y + 1);
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'alphabetic';
+        }
+
+        // Virus boss
+        if (boss) {
+          ctx.shadowBlur = 22;
+          ctx.shadowColor = '#ff244e';
+          ctx.fillStyle = '#ff244e';
+          ctx.fillRect(boss.x * CELL + 2, boss.y * CELL + 2, 20, 20);
+
+          ctx.fillStyle = '#fff';
+          ctx.fillRect(boss.x * CELL + 7, boss.y * CELL + 7, 4, 4);
+          ctx.fillRect(boss.x * CELL + 14, boss.y * CELL + 7, 4, 4);
+          ctx.shadowBlur = 0;
+        }
+
+        // Snake
+        const colors = skins[skin];
+
+        snake.forEach((s, i) => {
+          let color = i === 0 ? colors.head : colors.body;
+
+          if (skin === 'rainbow' && i > 0) {
+            color = `hsl(${(Date.now() / 12 + i * 15) % 360},90%,60%)`;
+          }
+
+          ctx.shadowBlur = i === 0 ? 18 : 8;
+          ctx.shadowColor = colors.glow;
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.roundRect(s.x * CELL + 2, s.y * CELL + 2, 20, 20, i === 0 ? 7 : 5);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+
+          if (i === 0) {
+            ctx.fillStyle = '#071018';
+
+            const ex = s.x * CELL + (dir.x === 1 ? 16 : dir.x === -1 ? 6 : 8);
+            const ey = s.y * CELL + (dir.y === 1 ? 16 : dir.y === -1 ? 6 : 8);
+
+            ctx.beginPath();
+            ctx.arc(ex, ey, 2, 0, Math.PI * 2);
+            ctx.arc(
+              ex + (dir.y === 0 ? 0 : 7),
+              ey + (dir.x === 0 ? 0 : 7),
+              2, 0, Math.PI * 2
+            );
+            ctx.fill();
+          }
+        });
+
+        // Particles
+        particles.forEach(p => {
+          ctx.globalAlpha = p.life;
+          ctx.fillStyle = '#ff3cac';
+          ctx.fillRect(p.x, p.y, 3, 3);
+        });
+        ctx.globalAlpha = 1;
+
+        // HUD overlay
+        ctx.fillStyle = 'rgba(67,245,229,.85)';
+        ctx.font = '12px monospace';
+        ctx.fillText(mode.toUpperCase(), 15, 25);
+
+        if (mode === 'rush') {
+          ctx.fillStyle = '#ff3cac';
+          ctx.fillText('TIME: ' + Math.ceil(timeLeft), 500, 25);
+        }
+
+        // Active effects and their remaining time
+        let effectY = 570;
+
+        if (doubleLeft > 0) {
+          ctx.fillStyle = '#ffd84d';
+          ctx.fillText('x2 SCORE: ' + doubleLeft.toFixed(1) + 's', 15, effectY);
+          effectY -= 17;
+        }
+
+        if (slowLeft > 0) {
+          ctx.fillStyle = '#43aaff';
+          ctx.fillText('SLOW MOTION: ' + slowLeft.toFixed(1) + 's', 15, effectY);
+          effectY -= 17;
+        }
+
+        if (snake.shield) {
+          ctx.fillStyle = '#bd73ff';
+          ctx.fillText('SHIELD ACTIVE', 15, effectY);
+        }
+
+        // CRT scanlines
+        ctx.fillStyle = 'rgba(0,0,0,.09)';
+        for (let y = 0; y < 600; y += 4) {
+          ctx.fillRect(0, y, 600, 1);
+        }
+      }
+
+      // Menu and controls
+      $('menuBtn').onclick = showMenu;
+      $('pauseBtn').onclick = pause;
+
+      $('restartBtn').onclick = () => {
+        state = 'ready';
+        reset();
+        showMenu();
+      };
+
+      $('soundBtn').onclick = () => {
+        sound = !sound;
+        $('soundBtn').textContent = 'SOUND: ' + (sound ? 'ON' : 'OFF');
+        if (sound) beep();
+      };
+
+      // Keyboard controls.
+      // e.code identifies the physical key, so the layout/language is irrelevant.
+      window.addEventListener('keydown', e => {
+        const map = {
+          ArrowUp: 'up',
+          ArrowDown: 'down',
+          ArrowLeft: 'left',
+          ArrowRight: 'right',
+          KeyW: 'up',
+          KeyA: 'left',
+          KeyS: 'down',
+          KeyD: 'right'
+        };
+
+        if (map[e.code]) {
+          e.preventDefault();
+          setDirection(map[e.code]);
+
+          if (state === 'ready') start();
+        }
+
+        if (e.code === 'Space') {
+          e.preventDefault();
+          pause();
+        }
+
+        if (e.code === 'Escape') {
+          showMenu();
+        }
+
+        if (e.code === 'KeyR') {
+          state = 'ready';
+          reset();
+          showMenu();
+        }
+      });
+
+      // Mobile D-pad
+      document.querySelectorAll('[data-dir]').forEach(b => {
+        b.addEventListener('pointerdown', e => {
+          e.preventDefault();
+          setDirection(b.dataset.dir);
+          if (state === 'ready') start();
+        });
+      });
+
+      // Swipe controls
+      let touchX = 0, touchY = 0;
+
+      canvas.addEventListener('touchstart', e => {
+        touchX = e.changedTouches[0].clientX;
+        touchY = e.changedTouches[0].clientY;
+      }, {passive: true});
+
+      canvas.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].clientX - touchX;
+        const dy = e.changedTouches[0].clientY - touchY;
+
+        if (Math.max(Math.abs(dx), Math.abs(dy)) < 18) return;
+
+        setDirection(
+          Math.abs(dx) > Math.abs(dy)
+            ? (dx > 0 ? 'right' : 'left')
+            : (dy > 0 ? 'down' : 'up')
+        );
+
+        if (state === 'ready') start();
+      }, {passive: true});
+
+      // Initial setup
+      sound = false;
+      snakeDemo.mount(canvas);
+      start();
+
+    })();
+  </script>
+</body>
+
+</html>

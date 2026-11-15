@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Змейка 2.0</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Courier New', monospace;
+            color: #333;
+            user-select: none;
+        }
+
+        #game-container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+        }
+
+        canvas {
+            background-color: #ddd;
+            display: block;
+            margin: 0 auto;
+            border: 2px solid #aaa;
+        }
+
+        #score {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+<link rel="stylesheet" href="board.css">
+<script src="autopilot.js"></script>
+</head>
+
+<body style="--board-background:#ddd">
+    <div id="game-container">
+        <div id="score">Счёт: 0</div>
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+        <button id="restartBtn" style="display: none;">Играть снова</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreDiv = document.getElementById('score');
+        const restartBtn = document.getElementById('restartBtn');
+
+        const gridSize = 20;
+        let canvasWidth = canvas.width;
+        let canvasHeight = canvas.height;
+
+        let snake;
+        let food;
+        let dx, dy;
+        let score;
+        let gameInterval;
+        let baseSpeed = 100;
+
+        function startGame() {
+            snake = [
+                {x: 10, y: 10},
+                {x: 9, y: 10},
+                {x: 8, y: 10}
+            ];
+            score = 0;
+            dx = 1;
+            dy = 0;
+            scoreDiv.textContent = 'Счёт: ' + score;
+            placeFood();
+            restartBtn.style.display = 'none';
+            clearInterval(gameInterval);
+            gameInterval = setInterval(gameLoop, baseSpeed);
+        }
+
+        function placeFood() {
+            food = {
+                x: Math.floor(Math.random() * (canvasWidth / gridSize)),
+                y: Math.floor(Math.random() * (canvasHeight / gridSize))
+            };
+            // Гарантируем, что еда не появится на змейке
+            if (snake.some(segment => segment.x === food.x && segment.y === food.y)) {
+                placeFood();
+            }
+        }
+
+        function gameLoop() {
+            ({x:dx, y:dy} = snakeDemo.direction({size:canvasWidth / gridSize, snake, dir:{x:dx, y:dy}, food}));
+            moveSnake();
+            if (checkCollision() || score >= 40) {
+                clearInterval(gameInterval);
+                setTimeout(startGame, 750);
+                return;
+            }
+            checkFood();
+            clearCanvas();
+            drawFood();
+            drawSnake();
+        }
+
+        function moveSnake() {
+            const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+            snake.unshift(head);
+            if (head.x !== food.x || head.y !== food.y) {
+                snake.pop();
+            }
+        }
+
+        function checkCollision() {
+            const head = snake[0];
+            if (head.x < 0 || head.x >= canvasWidth / gridSize || head.y < 0 || head.y >= canvasHeight / gridSize) {
+                return true;
+            }
+            for (let i = 1; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function checkFood() {
+            const head = snake[0];
+            if (head.x === food.x && head.y === food.y) {
+                score++;
+                scoreDiv.textContent = 'Счёт: ' + score;
+                placeFood();
+                clearInterval(gameInterval);
+                const newSpeed = Math.max(60, baseSpeed - score * 3);
+                gameInterval = setInterval(gameLoop, newSpeed);
+            }
+        }
+
+        function clearCanvas() {
+            ctx.fillStyle = '#ddd';
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+        }
+
+        function drawSnake() {
+            snake.forEach((segment, index) => {
+                if (index === 0) {
+                    ctx.fillStyle = '#006400';
+                    const centerX = segment.x * gridSize + gridSize / 2;
+                    const centerY = segment.y * gridSize + gridSize / 2;
+                    const size = gridSize * 0.6;
+                    ctx.beginPath();
+                    if (dx === 1 && dy === 0) { // вправо
+                        ctx.moveTo(centerX + size / 2, centerY);
+                        ctx.lineTo(centerX - size / 2, centerY - size / 2);
+                        ctx.lineTo(centerX - size / 2, centerY + size / 2);
+                    } else if (dx === -1 && dy === 0) { // влево
+                        ctx.moveTo(centerX - size / 2, centerY);
+                        ctx.lineTo(centerX + size / 2, centerY - size / 2);
+                        ctx.lineTo(centerX + size / 2, centerY + size / 2);
+                    } else if (dx === 0 && dy === -1) { // вверх
+                        ctx.moveTo(centerX, centerY - size / 2);
+                        ctx.lineTo(centerX - size / 2, centerY + size / 2);
+                        ctx.lineTo(centerX + size / 2, centerY + size / 2);
+                    } else if (dx === 0 && dy === 1) { // вниз
+                        ctx.moveTo(centerX, centerY + size / 2);
+                        ctx.lineTo(centerX - size / 2, centerY - size / 2);
+                        ctx.lineTo(centerX + size / 2, centerY - size / 2);
+                    }
+                    ctx.closePath();
+                    ctx.fill();
+                } else {
+                    ctx.fillStyle = '#90EE90';
+                    ctx.fillRect(segment.x * gridSize + 1, segment.y * gridSize + 1, gridSize - 2, gridSize - 2);
+                }
+            });
+        }
+
+        function drawFood() {
+            ctx.fillStyle = '#FF0000';
+            const centerX = food.x * gridSize + gridSize / 2;
+            const centerY = food.y * gridSize + gridSize / 2;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, gridSize / 3, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function changeDirection(e) {
+            const key = e.key.toLowerCase();
+            const goingUp = dy === -1;
+            const goingDown = dy === 1;
+            const goingLeft = dx === -1;
+            const goingRight = dx === 1;
+
+            // Стрелки
+            if (e.keyCode === 37 && !goingRight) {dx = -1; dy = 0;}
+            if (e.keyCode === 38 && !goingDown) {dx = 0; dy = -1;}
+            if (e.keyCode === 39 && !goingLeft) {dx = 1; dy = 0;}
+            if (e.keyCode === 40 && !goingUp) {dx = 0; dy = 1;}
+
+            // WASD
+            if (key === 'a' && !goingRight) {dx = -1; dy = 0;}
+            if (key === 'w' && !goingDown) {dx = 0; dy = -1;}
+            if (key === 'd' && !goingLeft) {dx = 1; dy = 0;}
+            if (key === 's' && !goingUp) {dx = 0; dy = 1;}
+        }
+
+        function handleResize() {
+            const scale = Math.min(window.innerWidth * 0.9 / canvasWidth, window.innerHeight * 0.7 / canvasHeight);
+            const newWidth = canvasWidth * scale;
+            const newHeight = canvasHeight * scale;
+            canvas.style.width = newWidth + 'px';
+            canvas.style.height = newHeight + 'px';
+        }
+
+        document.addEventListener('keydown', changeDirection);
+        restartBtn.addEventListener('click', startGame);
+        snakeDemo.mount(canvas);
+        startGame();
+    </script>
+</body>
+
+</html>

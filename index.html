@@ -192,7 +192,83 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
   .speaker-layout { grid-template-columns: 1fr; }
   .speaker-photo { width: min(100%, 220px); justify-self: start; }
 }
-</style></head><body><header class="brand"><img src="assets/itmo-white.png" alt="Университет ИТМО" width="1040" height="410"></header><span class="slide-number" id="slide-number" aria-live="polite" aria-label="Слайд 1">01</span><main class="deck" id="deck">
+.showcase > h2 {
+  font-size: clamp(22px, 5.9vw, 58px);
+  max-width: none;
+  margin-bottom: .45em;
+}
+.showcase > .eyebrow { margin-bottom: .55em; }
+.showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(8px, 1.25vw, 18px);
+}
+.showcase-window {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  height: clamp(174px, 24svh, 290px);
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.showcase-window.gpt { --bot: #086652; --bot-tint: #e7f5ef; }
+.showcase-window.claude { --bot: #924521; --bot-tint: #fbefe6; }
+.showcase-window.alisa { --bot: #701fc7; --bot-tint: #f3e9ff; }
+.showcase-window.giga { --bot: #176447; --bot-tint: #e8f5ec; }
+.window-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  padding: 7px clamp(8px, 1.3vw, 18px);
+  background: var(--bot-tint);
+  color: var(--bot);
+}
+.window-bar h3 { margin: 0; font-size: clamp(12px, 1.4vw, 20px); }
+.window-bar small { margin-inline-start: .3em; font-size: .72em; font-weight: 500; }
+.window-bar a { color: inherit; font-size: clamp(10px, .68em, 14px); white-space: nowrap; }
+.chat-preview {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(5px, 1vh, 12px);
+  padding: clamp(7px, 1.4vw, 18px);
+}
+.chat-preview p {
+  max-width: 90%;
+  margin: 0;
+  padding: .42em .72em;
+  border-radius: 10px;
+  font-size: clamp(11px, 1.2vw, 17px);
+  line-height: 1.25;
+}
+.chat-question { align-self: end; background: #eee8f6; }
+.chat-answer { align-self: start; background: var(--bot-tint); color: var(--bot); }
+.showcase-window iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  pointer-events: none;
+  background: var(--bot-tint);
+}
+@media (max-width: 560px) {
+  .showcase-window { border-radius: 9px; }
+  .window-bar small { display: block; margin-inline-start: 0; }
+  .chat-preview p { max-width: 100%; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .showcase.active .chat-question { animation: chat-in 350ms .2s both; }
+  .showcase.active .chat-answer { animation: chat-in 400ms 1.05s both; }
+  .showcase.active .showcase-window:nth-child(even) .chat-question { animation-delay: .4s; }
+  .showcase.active .showcase-window:nth-child(even) .chat-answer { animation-delay: 1.3s; }
+  @keyframes chat-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+</style></head><body><header class="brand"><img src="assets/itmo-white.png" alt="Университет ИТМО" width="1040" height="410"></header><span class="slide-number" id="slide-number" aria-live="polite" aria-label="Слайд 1 из 16">1/16</span><main class="deck" id="deck">
 <section class="slide cover active"><div class="eyebrow">Вводная встреча</div><h1>От <span class="highlight">алгоритма</span><br>к игре</h1><p class="lead">Как превратить учебную задачу в интересную браузерную игру — и чему при этом научиться самому.</p><p class="mini">← → — слайды · F / А — полный экран · Home / End — начало / конец</p></section>
 <section class="slide">
   <div class="speaker-layout">
@@ -210,7 +286,63 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
   </div>
 </section>
 <section class="slide"><div class="eyebrow">Зачем это нужно</div><h2>Вы будете не просто <span class="highlight">писать игру</span></h2><p class="lead">Ваша задача — понять алгоритм настолько хорошо, чтобы превратить его в правила, решения и последствия внутри игры.</p><div class="grid"><div class="card"><h3>Вы — исследователь алгоритма</h3><p>Понимаете шаги, ограничения и типичные ошибки.</p></div><div class="card"><h3>Вы — геймдизайнер</h3><p>Превращаете знания в действия игрока и проверяемые игровые ситуации.</p></div></div></section>
-<section class="slide"><div class="eyebrow">Демонстрация</div><h2>Четыре «Змейки».<br><span class="highlight">Один час.</span></h2><p class="lead">Четыре версии простой браузерной игры, созданные бесплатно с помощью разных ИИ.</p><div class="demo"><h3>Живая демонстрация</h3><p>Откройте свои четыре версии «Змейки» в соседних вкладках. Сравните управление, внешний вид, ошибки и качество исполнения.</p><p class="mini">Ссылки на игры можно добавить сюда позднее. Презентация не зависит от них.</p></div><p class="note">Вопрос группе: почему результаты отличаются и какой из них действительно лучше?</p></section>
+<section class="slide showcase" id="snake-chats">
+  <div class="eyebrow">Примеры диалогов</div>
+  <h2>Просто и бесплатно</h2>
+  <div class="showcase-grid">
+    <article class="showcase-window gpt">
+      <div class="window-bar"><h3>ChatGPT <small>OpenAI</small></h3></div>
+      <div class="chat-preview">
+        <p class="chat-question">Сделай неоновую «Змейку» с бонусами.</p>
+        <p class="chat-answer">Добавлю ускорение, бонусы и препятствия. Всё в одном HTML.</p>
+      </div>
+    </article>
+    <article class="showcase-window claude">
+      <div class="window-bar"><h3>Claude <small>Anthropic</small></h3></div>
+      <div class="chat-preview">
+        <p class="chat-question">Сделай «Змейку» с шахматными ходами.</p>
+        <p class="chat-answer">Добавлю выбор фигуры. От неё будет зависеть ход змейки.</p>
+      </div>
+    </article>
+    <article class="showcase-window alisa">
+      <div class="window-bar"><h3>Алиса <small>Яндекс</small></h3></div>
+      <div class="chat-preview">
+        <p class="chat-question">А если сделать «Змейку» в темноте?</p>
+        <p class="chat-answer">Подсвечу область вокруг головы и добавлю ловушки.</p>
+      </div>
+    </article>
+    <article class="showcase-window giga">
+      <div class="window-bar"><h3>ГигаЧат <small>Сбер</small></h3></div>
+      <div class="chat-preview">
+        <p class="chat-question">Сделай простую «Змейку» для браузера.</p>
+        <p class="chat-answer">Соберу игру со счётом и ростом скорости. Откроется сразу в браузере.</p>
+      </div>
+    </article>
+  </div>
+</section>
+<section class="slide showcase" id="snake-games">
+  <div class="eyebrow">Игры на автопилоте</div>
+  <h2>Четыре «Змейки»</h2>
+  <div class="showcase-grid">
+    <article class="showcase-window gpt">
+      <div class="window-bar"><h3>ChatGPT <small>OpenAI</small></h3><a href="https://github.com/i7ok/GPT_Snake" aria-label="Исходный код игры от ChatGPT">Код ↗</a></div>
+      <iframe title="Змейка от ChatGPT в режиме автопилота" data-src="games/chatgpt.html" sandbox="allow-scripts" tabindex="-1"></iframe>
+    </article>
+    <article class="showcase-window claude">
+      <div class="window-bar"><h3>Claude <small>Anthropic</small></h3><a href="https://github.com/i7ok/Claude_Snake" aria-label="Исходный код игры от Claude">Код ↗</a></div>
+      <iframe title="Змейка от Claude в режиме автопилота" data-src="games/claude.html" sandbox="allow-scripts" tabindex="-1"></iframe>
+    </article>
+    <article class="showcase-window alisa">
+      <div class="window-bar"><h3>Алиса <small>Яндекс</small></h3><a href="https://github.com/i7ok/Alisa_Snake" aria-label="Исходный код игры от Алиса">Код ↗</a></div>
+      <iframe title="Змейка от Алиса в режиме автопилота" data-src="games/alisa.html" sandbox="allow-scripts" tabindex="-1"></iframe>
+    </article>
+    <article class="showcase-window giga">
+      <div class="window-bar"><h3>ГигаЧат <small>Сбер</small></h3><a href="https://github.com/i7ok/Giga_snake" aria-label="Исходный код игры от ГигаЧат">Код ↗</a></div>
+      <iframe title="Змейка от ГигаЧат в режиме автопилота" data-src="games/gigachat.html" sandbox="allow-scripts" tabindex="-1"></iframe>
+    </article>
+  </div>
+</section>
+<section class="slide"><div class="eyebrow">Обсуждение</div><h2>Четыре «Змейки».<br><span class="highlight">Один час.</span></h2><p class="lead">Четыре версии простой браузерной игры, созданные бесплатно с помощью разных ИИ.</p><div class="demo"><h3>Сравните результаты</h3><p>Что изменилось в правилах и управлении? Какие идеи оказались интереснее в игре, чем в чате?</p></div><p class="note">Вопрос группе: почему результаты отличаются и какой из них действительно лучше?</p></section>
 <section class="slide"><div class="eyebrow">Вайбкодинг</div><h2>ИИ пишет код.<br><span class="highlight">Вы отвечаете за смысл.</span></h2><div class="steps"><div class="step"><h3>Идея</h3><small>Что делает игрок?</small></div><div class="step"><h3>Промпт</h3><small>Какие правила и требования?</small></div><div class="step"><h3>Прототип</h3><small>HTML / CSS / JavaScript</small></div><div class="step"><h3>Проверка</h3><small>Работает ли алгоритм правильно?</small></div></div><p class="lead">Можно быстро получить работающий прототип. Но нельзя доверять ему без тестирования и понимания алгоритма.</p></section>
 <section class="slide"><div class="eyebrow">Главный принцип</div><h2>Не «алгоритм в декорациях», а <span class="highlight">игровой вызов</span></h2><div class="grid"><div class="card"><span class="tag">Учебная задача</span><h3>Алгоритм Дейкстры</h3><p>Найти кратчайшие пути в графе с неотрицательными весами.</p></div><div class="card"><span class="tag">Игровой контекст</span><h3>Спасательная операция</h3><p>В затопленном городе нужно доставить помощь по дорожной сети.</p></div></div><p class="note">Важно: выбор маршрута на глаз ещё не обучает алгоритму Дейкстры. Игрок должен освоить его принцип работы.</p></section>
 <section class="slide"><div class="eyebrow">Схема проектирования</div><h2>От знания к действию</h2><div class="steps"><div class="step"><h3>Алгоритм</h3><small>Что изучаем?</small></div><div class="step"><h3>Действие</h3><small>Что решает игрок?</small></div><div class="step"><h3>Цель</h3><small>Зачем ему это?</small></div><div class="step"><h3>Обратная связь</h3><small>Что произойдёт?</small></div></div><p class="quote">Игрок должен не только видеть алгоритм, но и применять его, получать последствия и учиться на ошибках.</p></section>
@@ -224,6 +356,10 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
 </main><nav class="controls" aria-label="Управление слайдами"><button id="prev" aria-label="Предыдущий слайд">←</button><button id="next" aria-label="Следующий слайд">→</button></nav><script>
 const slides = [...document.querySelectorAll('.slide')];
 const slideNumber = document.getElementById('slide-number');
+const gameSlide = document.getElementById('snake-games');
+const gameFrames = gameSlide.querySelectorAll('iframe');
+// Chromium blocks sibling files inside sandboxed file:// frames.
+if (location.protocol === 'file:') gameFrames.forEach(frame => frame.removeAttribute('sandbox'));
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 let i = -1;
 let transition;
@@ -235,11 +371,13 @@ function show(n) {
   transition?.cancel();
   const previous = i;
   i = next;
-  slides[previous]?.classList.remove('active');
-  slides[i].classList.add('active');
+  slides.forEach((slide, index) => slide.classList.toggle('active', index === i));
   window.scrollTo(0, 0);
-  slideNumber.textContent = String(i + 1).padStart(2, '0');
-  slideNumber.setAttribute('aria-label', `Слайд ${i + 1}`);
+  slideNumber.textContent = `${i + 1}/${slides.length}`;
+  slideNumber.setAttribute('aria-label', `Слайд ${i + 1} из ${slides.length}`);
+
+  if (slides[previous] === gameSlide) gameFrames.forEach(frame => frame.removeAttribute('src'));
+  if (slides[i] === gameSlide) gameFrames.forEach(frame => { frame.src = frame.dataset.src; });
   history.replaceState(null, '', `#${i + 1}`);
 
   if (previous < 0 || reduceMotion.matches) return;

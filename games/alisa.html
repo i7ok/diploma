@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Змейка во тьме</title>
+  <style>
+    :root {
+      --bg: #05060a;
+      --text: #c9d1e0;
+      --muted: #6b7285;
+      --snake: #8b0f1e;
+      --snake-head: #d21f2f;
+      --food: #2fe06a;
+      --trap: #ff5aa8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 16px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    h1 {
+      font-size: 26px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #a01825;
+      text-shadow: 0 0 12px rgba(210, 31, 47, 0.45);
+    }
+
+    .hud {
+      display: flex;
+      gap: 24px;
+      font-size: 16px;
+      color: var(--muted);
+    }
+
+    .hud b {
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stage {
+      position: relative;
+    }
+
+    canvas {
+      background: #000;
+      border: 2px solid #2a0f16;
+      border-radius: 10px;
+      touch-action: none;
+      max-width: 100%;
+    }
+
+    .overlay {
+      position: absolute;
+      background: rgba(5, 6, 10, 0.88);
+      border-radius: 10px;
+      padding: 28px 40px;
+      text-align: center;
+      backdrop-filter: blur(2px);
+    }
+
+    .overlay h2 {
+      margin-bottom: 10px;
+      font-size: 24px;
+      color: #d21f2f;
+    }
+
+    .overlay p {
+      color: var(--muted);
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+<link rel="stylesheet" href="board.css">
+<script src="autopilot.js"></script>
+</head>
+
+<body style="--board-background:#0a0813">
+  <h1>Змейка во тьме</h1>
+  <div class="hud">
+    <span>Счёт: <b id="score">0</b></span>
+    <span>Ловушки: <b id="trapCount">0</b></span>
+    <span>Рекорд: <b id="best">0</b></span>
+  </div>
+
+  <div class="stage">
+    <canvas id="game" width="440" height="440"></canvas>
+    <div id="startScreen" class="overlay">
+      <h2>Змейка во тьме</h2>
+      <p>Ты видишь только то, что рядом с головой</p>
+      <p>Зелёное свечение — еда</p>
+      <p>Фиолетовое свечение — смерть</p>
+      <p>Каждое яблоко добавляет новую ловушку</p>
+      <p><br>Стрелки / WASD — движение</p>
+      <p>Пробел — пауза · свайп на телефоне</p>
+      <p><br>Нажми любую клавишу или тапни</p>
+    </div>
+    <div id="pauseScreen" class="overlay hidden">
+      <h2>Пауза</h2>
+      <p>Пробел — продолжить</p>
+    </div>
+    <div id="overScreen" class="overlay hidden">
+      <h2 id="overTitle">Ты погас во тьме</h2>
+      <p id="finalScore"></p>
+      <p>Пробел или тап — заново</p>
+    </div>
+  </div>
+
+  <p class="hint">Свет у головы — твой единственный друг. Стены, хвост и фиолетовые точки убивают.</p>
+
+  <script>
+    (() => {
+      const GRID = 20;
+      const CELL = 22;
+      const VIS_RADIUS = 4.2;       // радиус видимости в клетках
+
+      const canvas = document.getElementById('game');
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.height = GRID * CELL;
+
+      const scoreEl = document.getElementById('score');
+      const trapCountEl = document.getElementById('trapCount');
+      const bestEl = document.getElementById('best');
+      const startScreen = document.getElementById('startScreen');
+      const pauseScreen = document.getElementById('pauseScreen');
+      const overScreen = document.getElementById('overScreen');
+      const overTitle = document.getElementById('overTitle');
+      const finalScore = document.getElementById('finalScore');
+
+      let snake, dir, nextDir, food, traps, score, best, speed, timer, state, flicker = 0;
+      // state: 'start' | 'run' | 'pause' | 'over'
+
+      best = Number(snakeDemo.storage.getItem('snakeBest') || 0);
+      bestEl.textContent = best;
+
+      function reset() {
+        snake = [{x: 9, y: 10}, {x: 8, y: 10}, {x: 7, y: 10}];
+        dir = {x: 1, y: 0};
+        nextDir = dir;
+        score = 0;
+        speed = 140;
+        traps = [];          // счёт 0 — ловушек нет
+        placeFood();
+        placeTraps();
+        updateHud();
+        draw();
+      }
+
+      function updateHud() {
+        scoreEl.textContent = score;
+        trapCountEl.textContent = traps.length;
+        bestEl.textContent = best;
+      }
+
+      // Случайная свободная клетка: не змейка, не еда, не другая ловушка
+      function randomFreeCell() {
+        let cell;
+        do {
+          cell = {
+            x: Math.floor(Math.random() * GRID),
+            y: Math.floor(Math.random() * GRID)
+          };
+        } while (
+          snake.some(s => s.x === cell.x && s.y === cell.y) ||
+          (cell.x === food.x && cell.y === food.y) ||
+          traps.some(t => t.x === cell.x && t.y === cell.y)
+        );
+        return cell;
+      }
+
+      function placeFood() {
+        do {
+          food = {
+            x: Math.floor(Math.random() * GRID),
+            y: Math.floor(Math.random() * GRID)
+          };
+        } while (snake.some(s => s.x === food.x && s.y === food.y));
+      }
+
+      // Ловушек всегда ровно столько, сколько очков
+      function placeTraps() {
+        traps = [];
+        for (let i = 0; i < score; i++) {
+          traps.push(randomFreeCell());
+        }
+      }
+
+      function step() {
+        dir = snakeDemo.direction({size:GRID, snake, dir, food, hazards:traps, blockTail:true});
+        const head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
+
+        if (head.x < 0 || head.y < 0 || head.x >= GRID || head.y >= GRID) return die('wall');
+        if (snake.some(s => s.x === head.x && s.y === head.y)) return die('self');
+        if (traps.some(t => t.x === head.x && t.y === head.y)) return die('trap');
+
+        snake.unshift(head);
+
+        if (head.x === food.x && head.y === food.y) {
+          score++;
+          if (score >= 40) return die('round');
+          if (speed > 60) speed -= 4;
+          placeFood();
+          placeTraps();   // все ловушки перепрятались + добавилась одна новая
+          updateHud();
+          schedule();
+        } else {
+          snake.pop();
+          schedule();
+        }
+        draw();
+      }
+
+      function schedule() {
+        clearTimeout(timer);
+        if (state === 'run') timer = setTimeout(step, speed);
+      }
+
+      function die(reason) {
+        state = 'over';
+        setTimeout(startGame, 750);
+        clearTimeout(timer);
+        if (score > best) {
+          best = score;
+          snakeDemo.storage.setItem('snakeBest', best);
+        }
+        updateHud();
+        if (reason === 'trap') {
+          overTitle.textContent = 'Фиолетовая точка забрала тебя';
+        } else {
+          overTitle.textContent = 'Ты погас во тьме';
+        }
+        finalScore.textContent = 'Счёт: ' + score + ' · Ловушек на поле: ' + traps.length + ' · Рекорд: ' + best;
+        overScreen.classList.remove('hidden');
+      }
+
+      // Ступенчатое затемнение клетки в зависимости от расстояния до головы.
+      // Возвращает альфу черноты: 0 — полностью видно, 1 — чернота.
+      function fogAlpha(d, R) {
+        if (d < R - CELL * 0.2) return 0;        // внутри радиуса — чистая шахматка
+        if (d < R + CELL * 0.4) return 0.45;     // первая отметина — полусумрак
+        if (d < R + CELL * 1.4) return 0.78;     // вторая отметина — глубокий сумрак
+        return 1;                                 // полная тьма
+      }
+
+      function draw() {
+        const head = snake[0];
+        const hx = head.x * CELL + CELL / 2;
+        const hy = head.y * CELL + CELL / 2;
+        const R = VIS_RADIUS * CELL * (0.98 + (flicker || 0) * 0.02);
+
+        // === 1. Пол: шахматный порядок тёмно-серый / светло-серый ===
+        for (let x = 0; x < GRID; x++) {
+          for (let y = 0; y < GRID; y++) {
+            ctx.fillStyle = (x + y) % 2 === 0 ? '#4a4f5c' : '#2e323c';
+            ctx.fillRect(x * CELL, y * CELL, CELL, CELL);
+          }
+        }
+
+        // === 2. Жёлтая светящаяся сфера — ПОД змейкой, чуть меньше радиуса ===
+        ctx.globalCompositeOperation = 'lighter';
+        const glowR = R * 0.72;
+        const glow = ctx.createRadialGradient(hx, hy, 0, hx, hy, glowR);
+        glow.addColorStop(0, 'rgba(255, 214, 90, 0.30)');
+        glow.addColorStop(0.6, 'rgba(255, 214, 90, 0.14)');
+        glow.addColorStop(1, 'rgba(255, 214, 90, 0)');
+        ctx.fillStyle = glow;
+        ctx.fillRect(hx - glowR, hy - glowR, glowR * 2, glowR * 2);
+        ctx.globalCompositeOperation = 'source-over';
+
+        const pulse = 0.75 + 0.25 * Math.sin(Date.now() / 200);
+
+        // === 3. Еда (зелёная) — только если в радиусе видимости ===
+        const fdx = food.x * CELL + CELL / 2 - hx;
+        const fdy = food.y * CELL + CELL / 2 - hy;
+        if (Math.sqrt(fdx * fdx + fdy * fdy) <= R) {
+          const fg = ctx.createRadialGradient(
+            food.x * CELL + CELL / 2, food.y * CELL + CELL / 2, 0,
+            food.x * CELL + CELL / 2, food.y * CELL + CELL / 2, CELL * 1.4
+          );
+          fg.addColorStop(0, 'rgba(47, 224, 106, ' + (0.65 * pulse) + ')');
+          fg.addColorStop(1, 'rgba(47, 224, 106, 0)');
+          ctx.fillStyle = fg;
+          ctx.fillRect(food.x * CELL - CELL * 0.9, food.y * CELL - CELL * 0.9, CELL * 2.8, CELL * 2.8);
+          ctx.fillStyle = '#2fe06a';
+          ctx.beginPath();
+          ctx.arc(food.x * CELL + CELL / 2, food.y * CELL + CELL / 2, CELL * 0.35, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // === 4. Ловушки (фиолетовые) — каждая видна только в радиусе ===
+        traps.forEach(t => {
+          const tdx = t.x * CELL + CELL / 2 - hx;
+          const tdy = t.y * CELL + CELL / 2 - hy;
+          if (Math.sqrt(tdx * tdx + tdy * tdy) <= R) {
+            const tg = ctx.createRadialGradient(
+              t.x * CELL + CELL / 2, t.y * CELL + CELL / 2, 0,
+              t.x * CELL + CELL / 2, t.y * CELL + CELL / 2, CELL * 1.4
+            );
+            tg.addColorStop(0, 'rgba(255, 90, 168, ' + (0.6 * pulse) + ')');
+            tg.addColorStop(1, 'rgba(255, 90, 168, 0)');
+            ctx.fillStyle = tg;
+            ctx.fillRect(t.x * CELL - CELL * 0.9, t.y * CELL - CELL * 0.9, CELL * 2.8, CELL * 2.8);
+            ctx.fillStyle = '#ff5aa8';
+            ctx.beginPath();
+            ctx.arc(t.x * CELL + CELL / 2, t.y * CELL + CELL / 2, CELL * 0.35, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        });
+
+        // === 5. Туловище змейки ===
+        snake.forEach((s, i) => {
+          if (i === 0) return;
+          ctx.fillStyle = '#a01426';
+          roundRect(s.x * CELL + 3, s.y * CELL + 3, CELL - 6, CELL - 6, 5);
+        });
+
+        // === 6. Голова — красная, со зрачком ===
+        ctx.fillStyle = '#d21f2f';
+        roundRect(head.x * CELL + 2, head.y * CELL + 2, CELL - 4, CELL - 4, 6);
+        ctx.fillStyle = '#000';
+        const px = dir.x * CELL * 0.22;
+        const py = dir.y * CELL * 0.22;
+        ctx.beginPath();
+        ctx.arc(head.x * CELL + CELL / 2 + px, head.y * CELL + CELL / 2 + py, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // === 7. Туман: чёрный, накрывает поле ступенями ПО КЛЕТКАМ ===
+        for (let x = 0; x < GRID; x++) {
+          for (let y = 0; y < GRID; y++) {
+            const cx = x * CELL + CELL / 2;
+            const cy = y * CELL + CELL / 2;
+            const d = Math.sqrt((cx - hx) * (cx - hx) + (cy - hy) * (cy - hy));
+            const a = fogAlpha(d, R);
+            if (a > 0) {
+              ctx.fillStyle = 'rgba(0, 0, 0, ' + a + ')';
+              ctx.fillRect(x * CELL, y * CELL, CELL, CELL);
+            }
+          }
+        }
+      }
+
+      function roundRect(x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + w, y, x + w, y + h, r);
+        ctx.arcTo(x + w, y + h, x, y + h, r);
+        ctx.arcTo(x, y + h, x, y, r);
+        ctx.arcTo(x, y, x + w, y, r);
+        ctx.fill();
+      }
+
+      // лёгкое дрожание света (flicker) для атмосферы
+      function animateFlicker() {
+        flicker = Math.sin(Date.now() / 90) * 0.5 + Math.sin(Date.now() / 37) * 0.3;
+        if (state === 'run' || state === 'pause') draw();
+        requestAnimationFrame(animateFlicker);
+      }
+
+      function setDir(x, y) {
+        if (dir.x === -x && dir.y === -y) return;
+        nextDir = {x, y};
+      }
+
+      function startGame() {
+        reset();
+        state = 'run';
+        startScreen.classList.add('hidden');
+        overScreen.classList.add('hidden');
+        schedule();
+      }
+
+      function togglePause() {
+        if (state === 'run') {
+          state = 'pause';
+          clearTimeout(timer);
+          pauseScreen.classList.remove('hidden');
+        } else if (state === 'pause') {
+          state = 'run';
+          pauseScreen.classList.add('hidden');
+          schedule();
+        }
+      }
+
+      const keyMap = {
+        ArrowUp: [0, -1], ArrowDown: [0, 1], ArrowLeft: [-1, 0], ArrowRight: [1, 0],
+        w: [0, -1], s: [0, 1], a: [-1, 0], d: [1, 0],
+        ц: [0, -1], ы: [0, 1], ф: [-1, 0], в: [1, 0]
+      };
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === ' ') {
+          e.preventDefault();
+          if (state === 'start' || state === 'over') startGame();
+          else togglePause();
+          return;
+        }
+        if (state === 'start' || state === 'over') {startGame(); return;}
+        const d = keyMap[e.key];
+        if (d) {
+          e.preventDefault();
+          setDir(d[0], d[1]);
+        }
+      });
+
+      let touchStart = null;
+      canvas.addEventListener('touchstart', (e) => {
+        if (state === 'start' || state === 'over') {startGame(); return;}
+        touchStart = e.touches[0];
+      }, {passive: true});
+
+      canvas.addEventListener('touchmove', (e) => {
+        if (!touchStart) return;
+        const t = e.touches[0];
+        const dx = t.clientX - touchStart.clientX;
+        const dy = t.clientY - touchStart.clientY;
+        if (Math.abs(dx) < 24 && Math.abs(dy) < 24) return;
+        if (Math.abs(dx) > Math.abs(dy)) setDir(dx > 0 ? 1 : -1, 0);
+        else setDir(0, dy > 0 ? 1 : -1);
+        touchStart = null;
+      }, {passive: true});
+
+      canvas.addEventListener('click', () => {
+        if (state === 'start' || state === 'over') startGame();
+      });
+
+      snakeDemo.mount(canvas);
+      startGame();
+      animateFlicker();
+    })();
+  </script>
+</body>
+
+</html>
