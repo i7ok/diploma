@@ -537,7 +537,56 @@ body:has(.roadmap.active) { background: #eaf5f0; }
   .quality-grid, .techniques-grid { gap: 7px; }
   .quality-grid .card, .techniques-grid .card { padding: 8px; }
 }
-</style></head><body><header class="brand"><img src="assets/itmo-white.png" alt="Университет ИТМО" width="1040" height="410"></header><span class="slide-number" id="slide-number" aria-live="polite" aria-label="Слайд 1 из 13">1/13</span><main class="deck" id="deck">
+.game-examples {
+  max-width: 1160px;
+  margin-inline: auto;
+}
+.game-examples h2 {
+  max-width: none;
+  font-size: clamp(29px, 4.1vw, 60px);
+}
+.game-examples .eyebrow { margin-bottom: .6em; }
+.game-examples-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(8px, 1.1vw, 16px);
+}
+.game-example {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+}
+.game-example img {
+  display: block;
+  width: 100%;
+  height: clamp(104px, calc((100dvh - 345px) / 2), 275px);
+  object-fit: cover;
+  background: #221b2f;
+}
+.game-example-copy { padding: .5em .75em .55em; }
+.game-example h3 { margin-bottom: .25em; }
+.game-example h3 a { color: inherit; text-decoration-color: var(--line); text-underline-offset: 3px; }
+.game-example h3 a:hover { color: var(--violet); }
+.game-example p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .82em;
+  line-height: 1.28;
+}
+@media (max-width: 600px) {
+  .game-examples h2 { font-size: clamp(25px, 6.5vw, 36px); }
+  .game-example { border-radius: 9px; }
+  .game-example img { height: auto; aspect-ratio: 16 / 9; }
+  .game-example-copy { padding: .42em .48em; }
+  .game-example h3 { font-size: .88em; text-wrap: wrap; }
+  .game-example p { font-size: .74em; }
+}
+@media (max-height: 650px) and (min-width: 950px) {
+  .game-examples-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .game-example img { height: auto; aspect-ratio: 16 / 10; }
+}
+</style></head><body><header class="brand"><img src="assets/itmo-white.png" alt="Университет ИТМО" width="1040" height="410"></header><span class="slide-number" id="slide-number" aria-live="polite" aria-label="Слайд 1 из 15">1/15</span><main class="deck" id="deck">
 <section class="slide cover active"><div class="eyebrow">Вводная встреча</div><h1>От <span class="highlight">алгоритма</span><br>к игре</h1><p class="lead">Как превратить учебную задачу в интересную игру — и чему при этом научиться самому.</p><p class="mini">← → — слайды · F / А — полный экран · Home / End — начало / конец</p></section>
 <section class="slide">
   <div class="speaker-layout">
@@ -638,7 +687,6 @@ body:has(.roadmap.active) { background: #eaf5f0; }
   </div>
 </section>
 <section class="slide"><div class="eyebrow">Пять вопросов</div><h2>Проверьте свою идею</h2><ol><li>Что произойдёт, если игрок ошибётся?</li><li>Какое решение он принимает сам?</li><li>Почему нельзя всегда действовать одинаково?</li><li>Что изменится на следующем уровне?</li><li>Как проверить, чему игрок научился?</li></ol></section>
-<section class="slide"><div class="eyebrow">Первый шаг</div><h2>Мини-GDD: <span class="highlight">концепция вашей игры</span></h2><div class="grid"><div class="card"><h3>Учебная часть</h3><ul><li>Дисциплина и алгоритм</li><li>Что нужно освоить</li><li>Как алгоритм связан с действиями игрока</li><li>Как проверить освоение</li></ul></div><div class="card"><h3>Игровая часть</h3><ul><li>Название, жанр и сеттинг</li><li>Основная механика</li><li>Цель, правила, победа и поражение</li><li>Набросок внешнего вида</li></ul></div></div><p class="lead">Объём: 1–3 страницы. Код пока не нужен. Черновик лучше идеальной пустоты.</p></section>
 <section class="slide roadmap" id="project-order">
   <div class="eyebrow">Порядок работы</div>
   <h2>Начните с алгоритма</h2>
@@ -655,6 +703,75 @@ body:has(.roadmap.active) { background: #eaf5f0; }
 <div class="card"><h3>04. Оценивать эффективность</h3><p>Больше очков за меньшее число операций или меньшую стоимость решения.</p></div>
 <div class="card"><h3>05. Дать право на ошибку</h3><p>Попытка → последствия → объяснение → новая попытка.</p></div>
 <div class="card"><h3>06. Усложнять постепенно</h3><p>Сначала простая задача, затем новые ограничения и нестандартные случаи.</p></div></div></section>
+<section class="slide game-examples" id="game-examples-physics">
+  <div class="eyebrow">Примеры игровых механик</div>
+  <h2>Физика и автоматизация</h2>
+  <div class="game-examples-grid">
+    <article class="game-example">
+      <img src="assets/gameplay/beamng-drive.webp" alt="Столкновение автомобилей с грузовиком" width="960" height="540">
+      <div class="game-example-copy">
+        <h3><a href="https://store.steampowered.com/app/284160/" aria-label="BeamNG.drive, страница игры в Steam">BeamNG.drive</a></h3>
+        <p>Сравнить деформацию машины при разных скоростях и углах удара.</p>
+      </div>
+    </article>
+    <article class="game-example">
+      <img src="assets/gameplay/assetto-corsa.webp" alt="Гоночные машины проходят поворот" width="960" height="540">
+      <div class="game-example-copy">
+        <h3><a href="https://store.steampowered.com/app/244210/" aria-label="Assetto Corsa, страница игры в Steam">Assetto Corsa</a></h3>
+        <p>Подобрать точку торможения и траекторию в повороте.</p>
+      </div>
+    </article>
+    <article class="game-example">
+      <img src="assets/gameplay/portal-2.webp" alt="Портал и платформы в испытательной камере" width="960" height="540">
+      <div class="game-example-copy">
+        <h3><a href="https://store.steampowered.com/app/620/" aria-label="Portal 2, страница игры в Steam">Portal 2</a></h3>
+        <p>Использовать скорость падения для прыжка через портал.</p>
+      </div>
+    </article>
+    <article class="game-example">
+      <img src="assets/gameplay/factorio.webp" alt="Производственные линии и конвейеры" width="960" height="540">
+      <div class="game-example-copy">
+        <h3><a href="https://store.steampowered.com/app/427520/" aria-label="Factorio, страница игры в Steam">Factorio</a></h3>
+        <p>Найти узкое место и увеличить пропускную способность линии.</p>
+      </div>
+    </article>
+  </div>
+</section>
+<section class="slide game-examples" id="game-examples-systems">
+  <div class="eyebrow">Примеры игровых механик</div>
+  <h2>Конструкции и системы</h2>
+  <div class="game-examples-grid">
+    <article class="game-example">
+      <img src="assets/gameplay/besiege.webp" alt="Машина в редакторе конструкций" width="960" height="540">
+      <div class="game-example-copy">
+        <h3><a href="https://store.steampowered.com/app/346010/" aria-label="Besiege, страница игры в Steam">Besiege</a></h3>
+        <p>Собрать машину и на практике проверить её устойчивость.</p>
+      </div>
+    </article>
+    <article class="game-example">
+      <img src="assets/gameplay/cities-skylines.webp" alt="Городская развязка и жилые кварталы сверху" width="960" height="540">
+      <div class="game-example-copy">
+        <h3><a href="https://store.steampowered.com/app/255710/" aria-label="Cities: Skylines, страница игры в Steam">Cities: Skylines</a></h3>
+        <p>Проверить, как планировка дорог влияет на пробки.</p>
+      </div>
+    </article>
+    <article class="game-example">
+      <img src="assets/gameplay/civilization-vi.webp" alt="Карта с городами, границами и панелью технологий" width="960" height="540">
+      <div class="game-example-copy">
+        <h3><a href="https://store.steampowered.com/app/289070/" aria-label="Sid Meier’s Civilization VI, страница игры в Steam">Sid Meier’s Civilization VI</a></h3>
+        <p>Распределять ресурсы между развитием городов и исследованиями.</p>
+      </div>
+    </article>
+    <article class="game-example">
+      <img src="assets/gameplay/noita.webp" alt="Огонь распространяется по пещере" width="960" height="540">
+      <div class="game-example-copy">
+        <h3><a href="https://store.steampowered.com/app/881100/" aria-label="Noita, страница игры в Steam">Noita</a></h3>
+        <p>Экспериментировать с тем, как огонь и жидкости меняют окружение.</p>
+      </div>
+    </article>
+  </div>
+</section>
+<section class="slide"><div class="eyebrow">Первый шаг</div><h2>Мини-GDD: <span class="highlight">концепция вашей игры</span></h2><div class="grid"><div class="card"><h3>Учебная часть</h3><ul><li>Дисциплина и алгоритм</li><li>Что нужно освоить</li><li>Как алгоритм связан с действиями игрока</li><li>Как проверить освоение</li></ul></div><div class="card"><h3>Игровая часть</h3><ul><li>Название, жанр и сеттинг</li><li>Основная механика</li><li>Цель, правила, победа и поражение</li><li>Набросок внешнего вида</li></ul></div></div><p class="lead">Объём: 1–3 страницы. Код пока не нужен. Черновик лучше идеальной пустоты.</p></section>
 <section class="slide showcase" id="snake-chats">
   <div class="showcase-copy">
     <div class="showcase-title">
