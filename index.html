@@ -10,6 +10,7 @@
 }
 * { box-sizing: border-box; }
 body {
+  overflow-x: clip;
   margin: 0;
   min-height: 100dvh;
   background: var(--paper);
@@ -112,23 +113,24 @@ body:has(.cover.active) .brand img { filter: none; }
   clip-path: polygon(0 100%, 100% 0, 100% 100%);
   opacity: .22;
 }
-.footer {
-  position: fixed;
-  inset: auto 0 0;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 12px;
-  padding: 8px var(--gutter);
-  background: var(--paper);
-  border-top: 1px solid var(--line);
-  color: var(--muted);
-  font-size: 13px;
+.slide-number {
+  position: absolute;
+  top: clamp(16px, 3.5vh, 38px);
+  right: var(--gutter);
+  color: var(--violet);
+  font-size: clamp(16px, 1.5vw, 22px);
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
 }
-.footer > :last-child { text-align: right; }
-.controls { display: flex; align-items: center; gap: 12px; }
-#counter { min-width: 6ch; text-align: center; font-variant-numeric: tabular-nums; }
+body:has(.cover.active) .slide-number { color: #e3ccff; }
+.controls {
+  position: fixed;
+  z-index: 1;
+  right: var(--gutter);
+  bottom: max(14px, env(safe-area-inset-bottom));
+  display: flex;
+  gap: 8px;
+}
 button {
   min-width: 42px;
   min-height: 42px;
@@ -143,13 +145,6 @@ button {
 }
 button:hover { background: #eee2fb; }
 button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
-.progress {
-  position: fixed;
-  z-index: 2;
-  inset: 0 auto auto 0;
-  height: 4px;
-  background: #aa65ff;
-}
 @media (max-width: 850px) {
   .grid.three, .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
@@ -159,8 +154,6 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
   .grid, .grid.three, .steps { grid-template-columns: 1fr; }
   h1 { font-size: clamp(44px, 12vw, 68px); }
   .cover::after { width: 52%; opacity: .12; }
-  .footer { grid-template-columns: 1fr; justify-items: center; }
-  .footer > :first-child, .footer > :last-child { display: none; }
 }
 .speaker-layout {
   display: grid;
@@ -172,6 +165,9 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
   display: block;
   width: min(100%, 320px);
   height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: center 65%;
   border-radius: 20px;
   justify-self: end;
 }
@@ -196,7 +192,7 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
   .speaker-layout { grid-template-columns: 1fr; }
   .speaker-photo { width: min(100%, 220px); justify-self: start; }
 }
-</style></head><body><div class="progress" id="progress"></div><header class="brand"><img src="assets/itmo-white.png" alt="Университет ИТМО" width="1040" height="410"></header><main class="deck" id="deck">
+</style></head><body><header class="brand"><img src="assets/itmo-white.png" alt="Университет ИТМО" width="1040" height="410"></header><span class="slide-number" id="slide-number" aria-live="polite" aria-label="Слайд 1">01</span><main class="deck" id="deck">
 <section class="slide cover active"><div class="eyebrow">Вводная встреча</div><h1>От <span class="highlight">алгоритма</span><br>к игре</h1><p class="lead">Как превратить учебную задачу в интересную браузерную игру — и чему при этом научиться самому.</p><p class="mini">← → — слайды · F / А — полный экран · Home / End — начало / конец</p></section>
 <section class="slide">
   <div class="speaker-layout">
@@ -205,39 +201,53 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
       <h2>Илья Савенок</h2>
       <p class="lead">Game Developer, Agentic Developer &amp; Product Owner в <strong>Original Games</strong></p>
       <nav class="speaker-links" aria-label="Контакты Ильи Савенка">
-        <a href="https://t.me/i7nock">Telegram</a>
-        <a href="https://vk.ru/i7nock">ВКонтакте</a>
+        <a href="https://t.me/i7nock" aria-label="Telegram, t.me/i7nock">t.me/i7nock</a>
+        <a href="https://vk.ru/i7nock" aria-label="ВКонтакте, vk.ru/i7nock">vk.ru/i7nock</a>
         <a href="mailto:i7ok@yandex.ru">i7ok@yandex.ru</a>
       </nav>
     </div>
-    <img class="speaker-photo" src="assets/ilya-savenok.jpg" alt="Илья Савенок" width="320" height="320">
+    <img class="speaker-photo" src="assets/ilya-savenok.jpg" alt="Илья Савенок" width="1198" height="1600">
   </div>
 </section>
-<section class="slide"><div class="eyebrow">01 · Зачем это нужно</div><h2>Вы будете не просто <span class="highlight">писать игру</span></h2><p class="lead">Ваша задача — понять алгоритм настолько хорошо, чтобы превратить его в правила, решения и последствия внутри игры.</p><div class="grid"><div class="card"><h3>Вы — исследователь алгоритма</h3><p>Понимаете шаги, ограничения и типичные ошибки.</p></div><div class="card"><h3>Вы — геймдизайнер</h3><p>Превращаете знания в действия игрока и проверяемые игровые ситуации.</p></div></div></section>
-<section class="slide"><div class="eyebrow">02 · Демонстрация</div><h2>Четыре «Змейки».<br><span class="highlight">Один час.</span></h2><p class="lead">Четыре версии простой браузерной игры, созданные бесплатно с помощью разных ИИ.</p><div class="demo"><h3>Живая демонстрация</h3><p>Откройте свои четыре версии «Змейки» в соседних вкладках. Сравните управление, внешний вид, ошибки и качество исполнения.</p><p class="mini">Ссылки на игры можно добавить сюда позднее. Презентация не зависит от них.</p></div><p class="note">Вопрос группе: почему результаты отличаются и какой из них действительно лучше?</p></section>
-<section class="slide"><div class="eyebrow">03 · Вайбкодинг</div><h2>ИИ пишет код.<br><span class="highlight">Вы отвечаете за смысл.</span></h2><div class="steps"><div class="step"><h3>Идея</h3><small>Что делает игрок?</small></div><div class="step"><h3>Промпт</h3><small>Какие правила и требования?</small></div><div class="step"><h3>Прототип</h3><small>HTML / CSS / JavaScript</small></div><div class="step"><h3>Проверка</h3><small>Работает ли алгоритм правильно?</small></div></div><p class="lead">Можно быстро получить работающий прототип. Но нельзя доверять ему без тестирования и понимания алгоритма.</p></section>
-<section class="slide"><div class="eyebrow">04 · Главный принцип</div><h2>Не «алгоритм в декорациях», а <span class="highlight">игровой вызов</span></h2><div class="grid"><div class="card"><span class="tag">Учебная задача</span><h3>Алгоритм Дейкстры</h3><p>Найти кратчайшие пути в графе с неотрицательными весами.</p></div><div class="card"><span class="tag">Игровой контекст</span><h3>Спасательная операция</h3><p>В затопленном городе нужно доставить помощь по дорожной сети.</p></div></div><p class="note">Важно: выбор маршрута на глаз ещё не обучает алгоритму Дейкстры. Игрок должен освоить его принцип работы.</p></section>
-<section class="slide"><div class="eyebrow">05 · Схема проектирования</div><h2>От знания к действию</h2><div class="steps"><div class="step"><h3>Алгоритм</h3><small>Что изучаем?</small></div><div class="step"><h3>Действие</h3><small>Что решает игрок?</small></div><div class="step"><h3>Цель</h3><small>Зачем ему это?</small></div><div class="step"><h3>Обратная связь</h3><small>Что произойдёт?</small></div></div><p class="quote">Игрок должен не только видеть алгоритм, но и применять его, получать последствия и учиться на ошибках.</p></section>
-<section class="slide"><div class="eyebrow">06 · Приёмы 1–3</div><h2>Как оживить алгоритм?</h2><div class="grid three"><div class="card"><h3>01. Дать физический смысл</h3><p>Числа → сырьё, вес, время, энергия.</p><p>Линейное программирование → фабрика с ограниченными ресурсами.</p></div><div class="card"><h3>02. Сделать операции действиями</h3><p>Сравнения и обмены → перестановка предметов на конвейере.</p></div><div class="card"><h3>03. Сделать ограничения правилами</h3><p>Задача о рюкзаке → экспедиция с лимитом переносимого груза.</p></div></div></section>
-<section class="slide"><div class="eyebrow">07 · Приёмы 4–6</div><h2>Как сделать интересно?</h2><div class="grid three"><div class="card"><h3>04. Оценивать эффективность</h3><p>Больше очков за меньшее число операций или меньшую стоимость решения.</p></div><div class="card"><h3>05. Дать право на ошибку</h3><p>Попытка → последствия → объяснение → новая попытка.</p></div><div class="card"><h3>06. Усложнять постепенно</h3><p>Сначала простая задача, затем новые ограничения и нестандартные случаи.</p></div></div></section>
-<section class="slide"><div class="eyebrow">08 · Примеры</div><h2>Пять алгоритмов — пять игровых миров</h2><div class="grid"><div class="card"><h3>Задача о рюкзаке → Караван</h3><p>Собрать ценный груз при ограничении веса; сравнить подходы к решению.</p></div><div class="card"><h3>BFS / DFS → Цифровая сеть</h3><p>Исследовать узлы, управляя очередью или стеком.</p></div><div class="card"><h3>Линейное программирование → Марс</h3><p>Спланировать производство кислорода, еды и энергии.</p></div><div class="card"><h3>Краскал → Дороги королевства</h3><p>Соединить города без циклов с минимальной суммарной стоимостью.</p></div></div><p class="mini">Ещё вариант: планирование расписаний → управление больницей или фабрикой.</p></section>
-<section class="slide"><div class="eyebrow">09 · Проверка качества</div><h2>Это обучающая игра или <span class="highlight">просто декорация?</span></h2><div class="grid three"><div class="card"><h3>1. Декоративно</h3><p>Платформер, а между уровнями — тест про алгоритм.</p></div><div class="card"><h3>2. Прикладно</h3><p>Игрок решает задачу маршрута, но может действовать наугад.</p></div><div class="card"><h3>3. Обучающе</h3><p>Игрок применяет шаги метода, видит ошибки и переносит навык на новые задачи.</p></div></div><p class="mini">Это рабочая шкала для обсуждения концепций, а не универсальная научная классификация.</p></section>
-<section class="slide"><div class="eyebrow">10 · Пять вопросов</div><h2>Проверьте свою идею</h2><ol><li>Что произойдёт, если игрок ошибётся?</li><li>Какое решение он принимает сам?</li><li>Почему нельзя всегда действовать одинаково?</li><li>Что изменится на следующем уровне?</li><li>Как проверить, чему игрок научился?</li></ol></section>
-<section class="slide"><div class="eyebrow">11 · Первое домашнее задание</div><h2>Мини-GDD: <span class="highlight">концепция вашей игры</span></h2><div class="grid"><div class="card"><h3>Учебная часть</h3><ul><li>Дисциплина и алгоритм</li><li>Что нужно освоить</li><li>Как алгоритм связан с действиями игрока</li><li>Как проверить освоение</li></ul></div><div class="card"><h3>Игровая часть</h3><ul><li>Название, жанр и сеттинг</li><li>Основная механика</li><li>Цель, правила, победа и поражение</li><li>Набросок внешнего вида</li></ul></div></div><p class="lead">Объём: 1–3 страницы. Код пока не нужен. Черновик лучше идеальной пустоты.</p></section>
+<section class="slide"><div class="eyebrow">Зачем это нужно</div><h2>Вы будете не просто <span class="highlight">писать игру</span></h2><p class="lead">Ваша задача — понять алгоритм настолько хорошо, чтобы превратить его в правила, решения и последствия внутри игры.</p><div class="grid"><div class="card"><h3>Вы — исследователь алгоритма</h3><p>Понимаете шаги, ограничения и типичные ошибки.</p></div><div class="card"><h3>Вы — геймдизайнер</h3><p>Превращаете знания в действия игрока и проверяемые игровые ситуации.</p></div></div></section>
+<section class="slide"><div class="eyebrow">Демонстрация</div><h2>Четыре «Змейки».<br><span class="highlight">Один час.</span></h2><p class="lead">Четыре версии простой браузерной игры, созданные бесплатно с помощью разных ИИ.</p><div class="demo"><h3>Живая демонстрация</h3><p>Откройте свои четыре версии «Змейки» в соседних вкладках. Сравните управление, внешний вид, ошибки и качество исполнения.</p><p class="mini">Ссылки на игры можно добавить сюда позднее. Презентация не зависит от них.</p></div><p class="note">Вопрос группе: почему результаты отличаются и какой из них действительно лучше?</p></section>
+<section class="slide"><div class="eyebrow">Вайбкодинг</div><h2>ИИ пишет код.<br><span class="highlight">Вы отвечаете за смысл.</span></h2><div class="steps"><div class="step"><h3>Идея</h3><small>Что делает игрок?</small></div><div class="step"><h3>Промпт</h3><small>Какие правила и требования?</small></div><div class="step"><h3>Прототип</h3><small>HTML / CSS / JavaScript</small></div><div class="step"><h3>Проверка</h3><small>Работает ли алгоритм правильно?</small></div></div><p class="lead">Можно быстро получить работающий прототип. Но нельзя доверять ему без тестирования и понимания алгоритма.</p></section>
+<section class="slide"><div class="eyebrow">Главный принцип</div><h2>Не «алгоритм в декорациях», а <span class="highlight">игровой вызов</span></h2><div class="grid"><div class="card"><span class="tag">Учебная задача</span><h3>Алгоритм Дейкстры</h3><p>Найти кратчайшие пути в графе с неотрицательными весами.</p></div><div class="card"><span class="tag">Игровой контекст</span><h3>Спасательная операция</h3><p>В затопленном городе нужно доставить помощь по дорожной сети.</p></div></div><p class="note">Важно: выбор маршрута на глаз ещё не обучает алгоритму Дейкстры. Игрок должен освоить его принцип работы.</p></section>
+<section class="slide"><div class="eyebrow">Схема проектирования</div><h2>От знания к действию</h2><div class="steps"><div class="step"><h3>Алгоритм</h3><small>Что изучаем?</small></div><div class="step"><h3>Действие</h3><small>Что решает игрок?</small></div><div class="step"><h3>Цель</h3><small>Зачем ему это?</small></div><div class="step"><h3>Обратная связь</h3><small>Что произойдёт?</small></div></div><p class="quote">Игрок должен не только видеть алгоритм, но и применять его, получать последствия и учиться на ошибках.</p></section>
+<section class="slide"><div class="eyebrow">Приёмы 1–3</div><h2>Как оживить алгоритм?</h2><div class="grid three"><div class="card"><h3>01. Дать физический смысл</h3><p>Числа → сырьё, вес, время, энергия.</p><p>Линейное программирование → фабрика с ограниченными ресурсами.</p></div><div class="card"><h3>02. Сделать операции действиями</h3><p>Сравнения и обмены → перестановка предметов на конвейере.</p></div><div class="card"><h3>03. Сделать ограничения правилами</h3><p>Задача о рюкзаке → экспедиция с лимитом переносимого груза.</p></div></div></section>
+<section class="slide"><div class="eyebrow">Приёмы 4–6</div><h2>Как сделать интересно?</h2><div class="grid three"><div class="card"><h3>04. Оценивать эффективность</h3><p>Больше очков за меньшее число операций или меньшую стоимость решения.</p></div><div class="card"><h3>05. Дать право на ошибку</h3><p>Попытка → последствия → объяснение → новая попытка.</p></div><div class="card"><h3>06. Усложнять постепенно</h3><p>Сначала простая задача, затем новые ограничения и нестандартные случаи.</p></div></div></section>
+<section class="slide"><div class="eyebrow">Примеры</div><h2>Пять алгоритмов — пять игровых миров</h2><div class="grid"><div class="card"><h3>Задача о рюкзаке → Караван</h3><p>Собрать ценный груз при ограничении веса; сравнить подходы к решению.</p></div><div class="card"><h3>BFS / DFS → Цифровая сеть</h3><p>Исследовать узлы, управляя очередью или стеком.</p></div><div class="card"><h3>Линейное программирование → Марс</h3><p>Спланировать производство кислорода, еды и энергии.</p></div><div class="card"><h3>Краскал → Дороги королевства</h3><p>Соединить города без циклов с минимальной суммарной стоимостью.</p></div></div><p class="mini">Ещё вариант: планирование расписаний → управление больницей или фабрикой.</p></section>
+<section class="slide"><div class="eyebrow">Проверка качества</div><h2>Это обучающая игра или <span class="highlight">просто декорация?</span></h2><div class="grid three"><div class="card"><h3>1. Декоративно</h3><p>Платформер, а между уровнями — тест про алгоритм.</p></div><div class="card"><h3>2. Прикладно</h3><p>Игрок решает задачу маршрута, но может действовать наугад.</p></div><div class="card"><h3>3. Обучающе</h3><p>Игрок применяет шаги метода, видит ошибки и переносит навык на новые задачи.</p></div></div><p class="mini">Это рабочая шкала для обсуждения концепций, а не универсальная научная классификация.</p></section>
+<section class="slide"><div class="eyebrow">Пять вопросов</div><h2>Проверьте свою идею</h2><ol><li>Что произойдёт, если игрок ошибётся?</li><li>Какое решение он принимает сам?</li><li>Почему нельзя всегда действовать одинаково?</li><li>Что изменится на следующем уровне?</li><li>Как проверить, чему игрок научился?</li></ol></section>
+<section class="slide"><div class="eyebrow">Первое домашнее задание</div><h2>Мини-GDD: <span class="highlight">концепция вашей игры</span></h2><div class="grid"><div class="card"><h3>Учебная часть</h3><ul><li>Дисциплина и алгоритм</li><li>Что нужно освоить</li><li>Как алгоритм связан с действиями игрока</li><li>Как проверить освоение</li></ul></div><div class="card"><h3>Игровая часть</h3><ul><li>Название, жанр и сеттинг</li><li>Основная механика</li><li>Цель, правила, победа и поражение</li><li>Набросок внешнего вида</li></ul></div></div><p class="lead">Объём: 1–3 страницы. Код пока не нужен. Черновик лучше идеальной пустоты.</p></section>
 <section class="slide cover"><div class="eyebrow">Финал</div><h1>Не начинайте<br>с <span class="highlight">кода.</span></h1><p class="lead">Начните с вопроса: «Какое действие игрока поможет ему понять алгоритм?»</p><p class="big">Алгоритм → решение → игра → обучение.</p></section>
-</main><div class="footer"><span>От алгоритма к игре</span><span class="controls"><button id="prev" aria-label="Предыдущий слайд">←</button> <span id="counter" aria-live="polite">1 / 14</span> <button id="next" aria-label="Следующий слайд">→</button></span><span>F / А — полный экран</span></div><script>
+</main><nav class="controls" aria-label="Управление слайдами"><button id="prev" aria-label="Предыдущий слайд">←</button><button id="next" aria-label="Следующий слайд">→</button></nav><script>
 const slides = [...document.querySelectorAll('.slide')];
-const counter = document.getElementById('counter');
-const progress = document.getElementById('progress');
-let i = 0;
+const slideNumber = document.getElementById('slide-number');
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+let i = -1;
+let transition;
 
 function show(n) {
-  i = Math.max(0, Math.min(slides.length - 1, n));
-  slides.forEach((slide, index) => slide.classList.toggle('active', i === index));
+  const next = Math.max(0, Math.min(slides.length - 1, n));
+  if (next === i) return;
+
+  transition?.cancel();
+  const previous = i;
+  i = next;
+  slides[previous]?.classList.remove('active');
+  slides[i].classList.add('active');
   window.scrollTo(0, 0);
-  counter.textContent = `${i + 1} / ${slides.length}`;
-  progress.style.width = `${(i + 1) / slides.length * 100}%`;
+  slideNumber.textContent = String(i + 1).padStart(2, '0');
+  slideNumber.setAttribute('aria-label', `Слайд ${i + 1}`);
   history.replaceState(null, '', `#${i + 1}`);
+
+  if (previous < 0 || reduceMotion.matches) return;
+  const offset = i > previous ? 26 : -26;
+  transition = slides[i].animate([
+    { opacity: 0, transform: `translateX(${offset}px) scale(.99)` },
+    { opacity: 1, transform: 'none' },
+  ], { duration: 340, easing: 'cubic-bezier(.2,.75,.25,1)' });
 }
 
 document.getElementById('prev').onclick = () => show(i - 1);
