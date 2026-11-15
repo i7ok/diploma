@@ -402,8 +402,59 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
     to { opacity: 1; transform: translateY(0); }
   }
 }
+.quality-card {
+  --quality-ink: #9f253a;
+  --quality-border: #cb344f;
+  --quality-paper: #fff0f2;
+  border: 2px solid var(--quality-border);
+  background: var(--quality-paper);
+}
+.quality-card.applied {
+  --quality-ink: #765200;
+  --quality-border: #b98508;
+  --quality-paper: #fff7d9;
+}
+.quality-card.educational {
+  --quality-ink: #12623e;
+  --quality-border: #23835a;
+  --quality-paper: #e9f8ee;
+}
+.quality-card h3, .quality-card strong { color: var(--quality-ink); }
+.quality-card strong { font-size: .78em; }
+body:has(.roadmap.active) { background: #eaf5f0; }
+.roadmap h2 { color: #163d34; }
+.roadmap .eyebrow { color: #226b55; }
+.roadmap-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(10px, 1.5vw, 22px);
+  padding: 0;
+  list-style: none;
+  counter-reset: roadmap-step;
+}
+.roadmap-steps li {
+  margin: 0;
+  padding: clamp(15px, 2vw, 28px);
+  border: 1px solid #bdd9cc;
+  border-radius: 14px;
+  background: #f9fdfb;
+  color: #163d34;
+  counter-increment: roadmap-step;
+}
+.roadmap-steps li::before {
+  display: block;
+  margin-bottom: .45em;
+  color: #226b55;
+  font-size: 1.4em;
+  font-weight: 750;
+  content: counter(roadmap-step, decimal-leading-zero);
+}
+.roadmap-steps p { margin-bottom: 0; }
+@media (max-width: 560px) {
+  .roadmap-steps { grid-template-columns: 1fr; }
+}
 </style></head><body><header class="brand"><img src="assets/itmo-white.png" alt="Университет ИТМО" width="1040" height="410"></header><span class="slide-number" id="slide-number" aria-live="polite" aria-label="Слайд 1 из 14">1/14</span><main class="deck" id="deck">
-<section class="slide cover active"><div class="eyebrow">Вводная встреча</div><h1>От <span class="highlight">алгоритма</span><br>к игре</h1><p class="lead">Как превратить учебную задачу в интересную браузерную игру — и чему при этом научиться самому.</p><p class="mini">← → — слайды · F / А — полный экран · Home / End — начало / конец</p></section>
+<section class="slide cover active"><div class="eyebrow">Вводная встреча</div><h1>От <span class="highlight">алгоритма</span><br>к игре</h1><p class="lead">Как превратить учебную задачу в интересную игру — и чему при этом научиться самому.</p><p class="mini">← → — слайды · F / А — полный экран · Home / End — начало / конец</p></section>
 <section class="slide">
   <div class="speaker-layout">
     <div>
@@ -418,6 +469,39 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
     </div>
     <img class="speaker-photo" src="assets/ilya-savenok.jpg" alt="Илья Савенок" width="1198" height="1600">
   </div>
+</section>
+<section class="slide" id="game-quality">
+  <div class="eyebrow">Цель проекта</div>
+  <h2>Создаём <span class="highlight">обучающую игру</span></h2>
+  <p class="lead">Симуляция показывает, как работает алгоритм. В нашей игре у игрока есть цель, правила и выбор: он применяет алгоритм и видит последствия своих решений.</p>
+  <div class="grid three quality-grid">
+    <div class="card quality-card decorative">
+      <h3>1. Декоративно</h3>
+      <p>Платформер, а между уровнями — тест про алгоритм.</p>
+      <strong>Исключаем</strong>
+    </div>
+    <div class="card quality-card applied">
+      <h3>2. Прикладно</h3>
+      <p>Игрок решает задачу маршрута, но может действовать наугад.</p>
+      <strong>Нужно доработать</strong>
+    </div>
+    <div class="card quality-card educational">
+      <h3>3. Обучающе</h3>
+      <p>Игрок применяет шаги метода, видит ошибки и переносит навык на новые задачи.</p>
+      <strong>Цель проекта</strong>
+    </div>
+  </div>
+</section>
+<section class="slide"><div class="eyebrow">Пять вопросов</div><h2>Проверьте свою идею</h2><ol><li>Что произойдёт, если игрок ошибётся?</li><li>Какое решение он принимает сам?</li><li>Почему нельзя всегда действовать одинаково?</li><li>Что изменится на следующем уровне?</li><li>Как проверить, чему игрок научился?</li></ol></section>
+<section class="slide"><div class="eyebrow">Первое домашнее задание</div><h2>Мини-GDD: <span class="highlight">концепция вашей игры</span></h2><div class="grid"><div class="card"><h3>Учебная часть</h3><ul><li>Дисциплина и алгоритм</li><li>Что нужно освоить</li><li>Как алгоритм связан с действиями игрока</li><li>Как проверить освоение</li></ul></div><div class="card"><h3>Игровая часть</h3><ul><li>Название, жанр и сеттинг</li><li>Основная механика</li><li>Цель, правила, победа и поражение</li><li>Набросок внешнего вида</li></ul></div></div><p class="lead">Объём: 1–3 страницы. Код пока не нужен. Черновик лучше идеальной пустоты.</p></section>
+<section class="slide roadmap" id="project-order">
+  <div class="eyebrow">Порядок работы</div>
+  <h2>Начните с алгоритма</h2>
+  <ol class="roadmap-steps">
+    <li><h3>Разберите алгоритм</h3><p>Определите, какие шаги игрок должен освоить.</p></li>
+    <li><h3>Придумайте игру</h3><p>Превратите эти шаги в действия игрока, правила и цель.</p></li>
+    <li><h3>Напишите код</h3><p>Соберите прототип и проверьте его на игроках.</p></li>
+  </ol>
 </section>
 <section class="slide showcase" id="snake-chats">
   <div class="showcase-copy">
@@ -511,10 +595,6 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
 <section class="slide"><div class="eyebrow">Приёмы 1–3</div><h2>Как оживить алгоритм?</h2><div class="grid three"><div class="card"><h3>01. Дать физический смысл</h3><p>Числа → сырьё, вес, время, энергия.</p><p>Линейное программирование → фабрика с ограниченными ресурсами.</p></div><div class="card"><h3>02. Сделать операции действиями</h3><p>Сравнения и обмены → перестановка предметов на конвейере.</p></div><div class="card"><h3>03. Сделать ограничения правилами</h3><p>Задача о рюкзаке → экспедиция с лимитом переносимого груза.</p></div></div></section>
 <section class="slide"><div class="eyebrow">Приёмы 4–6</div><h2>Как сделать интересно?</h2><div class="grid three"><div class="card"><h3>04. Оценивать эффективность</h3><p>Больше очков за меньшее число операций или меньшую стоимость решения.</p></div><div class="card"><h3>05. Дать право на ошибку</h3><p>Попытка → последствия → объяснение → новая попытка.</p></div><div class="card"><h3>06. Усложнять постепенно</h3><p>Сначала простая задача, затем новые ограничения и нестандартные случаи.</p></div></div></section>
 <section class="slide"><div class="eyebrow">Примеры</div><h2>Пять алгоритмов — пять игровых миров</h2><div class="grid"><div class="card"><h3>Задача о рюкзаке → Караван</h3><p>Собрать ценный груз при ограничении веса; сравнить подходы к решению.</p></div><div class="card"><h3>BFS / DFS → Цифровая сеть</h3><p>Исследовать узлы, управляя очередью или стеком.</p></div><div class="card"><h3>Линейное программирование → Марс</h3><p>Спланировать производство кислорода, еды и энергии.</p></div><div class="card"><h3>Краскал → Дороги королевства</h3><p>Соединить города без циклов с минимальной суммарной стоимостью.</p></div></div><p class="mini">Ещё вариант: планирование расписаний → управление больницей или фабрикой.</p></section>
-<section class="slide"><div class="eyebrow">Проверка качества</div><h2>Это обучающая игра или <span class="highlight">просто декорация?</span></h2><div class="grid three"><div class="card"><h3>1. Декоративно</h3><p>Платформер, а между уровнями — тест про алгоритм.</p></div><div class="card"><h3>2. Прикладно</h3><p>Игрок решает задачу маршрута, но может действовать наугад.</p></div><div class="card"><h3>3. Обучающе</h3><p>Игрок применяет шаги метода, видит ошибки и переносит навык на новые задачи.</p></div></div><p class="mini">Это рабочая шкала для обсуждения концепций, а не универсальная научная классификация.</p></section>
-<section class="slide"><div class="eyebrow">Пять вопросов</div><h2>Проверьте свою идею</h2><ol><li>Что произойдёт, если игрок ошибётся?</li><li>Какое решение он принимает сам?</li><li>Почему нельзя всегда действовать одинаково?</li><li>Что изменится на следующем уровне?</li><li>Как проверить, чему игрок научился?</li></ol></section>
-<section class="slide"><div class="eyebrow">Первое домашнее задание</div><h2>Мини-GDD: <span class="highlight">концепция вашей игры</span></h2><div class="grid"><div class="card"><h3>Учебная часть</h3><ul><li>Дисциплина и алгоритм</li><li>Что нужно освоить</li><li>Как алгоритм связан с действиями игрока</li><li>Как проверить освоение</li></ul></div><div class="card"><h3>Игровая часть</h3><ul><li>Название, жанр и сеттинг</li><li>Основная механика</li><li>Цель, правила, победа и поражение</li><li>Набросок внешнего вида</li></ul></div></div><p class="lead">Объём: 1–3 страницы. Код пока не нужен. Черновик лучше идеальной пустоты.</p></section>
-<section class="slide cover"><div class="eyebrow">Финал</div><h1>Не начинайте<br>с <span class="highlight">кода.</span></h1><p class="lead">Начните с вопроса: «Какое действие игрока поможет ему понять алгоритм?»</p><p class="big">Алгоритм → решение → игра → обучение.</p></section>
 </main><nav class="controls" aria-label="Управление слайдами"><button id="prev" aria-label="Предыдущий слайд">←</button><button id="next" aria-label="Следующий слайд">→</button></nav><script>
 const slides = [...document.querySelectorAll('.slide')];
 const slideNumber = document.getElementById('slide-number');
