@@ -464,6 +464,7 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
   font-size: .83em;
   font-weight: 750;
 }
+.anatomy-symbol svg { width: 1.3em; height: 1.3em; }
 .anatomy-symbol.sound { color: #6622a1; background: #f0e5fc; }
 .anatomy-symbol.mechanics { color: #13624b; background: #e6f5ed; }
 .anatomy-symbol.implementation { color: #815111; background: #fff1d9; }
@@ -813,7 +814,13 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
   <p class="lead">Четыре составляющие игрового опыта.</p>
   <div class="grid anatomy-grid">
     <div class="card anatomy-card">
-      <span class="anatomy-symbol visual" aria-hidden="true">◈</span>
+      <span class="anatomy-symbol visual" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="3"/>
+          <circle cx="9" cy="9" r="1.5"/>
+          <path d="m3 17 5-4 3 3 5-6 5 5"/>
+        </svg>
+      </span>
       <h3>Визуал</h3><p>Что игрок видит: графику, интерфейс и анимации.</p>
     </div>
     <div class="card anatomy-card">
@@ -821,7 +828,12 @@ button:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
       <h3>Звук</h3><p>Что игрок слышит: музыку, эффекты и звуки мира.</p>
     </div>
     <div class="card anatomy-card">
-      <span class="anatomy-symbol mechanics" aria-hidden="true">↔</span>
+      <span class="anatomy-symbol mechanics" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M7 6h10a4 4 0 0 1 4 3.5l1 6a2.5 2.5 0 0 1-4.2 2.2L15 15H9l-2.8 2.7A2.5 2.5 0 0 1 2 15.5l1-6A4 4 0 0 1 7 6Z"/>
+          <path d="M6 10.5h4m-2-2v4m8-2h.01m2.5 2h.01"/>
+        </svg>
+      </span>
       <h3>Механики</h3><p>Что игрок делает и по каким правилам действует.</p>
     </div>
     <div class="card anatomy-card fun-tile">
